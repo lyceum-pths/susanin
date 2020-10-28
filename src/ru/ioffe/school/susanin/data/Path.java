@@ -1,4 +1,8 @@
 package ru.ioffe.school.susanin.data;
 
-public class Path {
+public abstract class Way {
+  public static class Path extends Way {
+  }
+  public static class  Road extends Way {
+  }
 }
