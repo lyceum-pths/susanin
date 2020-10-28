@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3729310-c793-4709-bc65-0dc479fb3a5e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
