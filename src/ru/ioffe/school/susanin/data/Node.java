@@ -1,4 +1,4 @@
 package ru.ioffe.school.susanin.data;
 
-public class Node {
+public abstract class Node {
 }
