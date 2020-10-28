@@ -3,9 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="d3729310-c793-4709-bc65-0dc479fb3a5e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/MapGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/MapGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Node.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Stop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Stop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,6 +38,9 @@
   </component>
   <component name="ProjectId" id="1jVvk7ZGbBdHSIChp6BBoqAFOQ4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../xml_test" />
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
