@@ -1,4 +1,2 @@
 package ru.ioffe.school.susanin.data;
-
-public abstract class Node {
-}
+public class Stop extends Node{}
