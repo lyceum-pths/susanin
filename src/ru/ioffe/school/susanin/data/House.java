@@ -1,6 +1,6 @@
 package ru.ioffe.school.susanin.data;
 
-public class House extends Node {
+public class House extends Point {
 
     final int number;
     final String street, name;

@@ -1,9 +1,9 @@
 package ru.ioffe.school.susanin.data;
 
-public abstract class Node {
+public abstract class Point {
     final long id;
     final double lat, lon;
-    public Node(long id, double lat, double lon) {
+    public Point(long id, double lat, double lon) {
         this.id = id;
         this.lat = lat;
         this.lon = lon;

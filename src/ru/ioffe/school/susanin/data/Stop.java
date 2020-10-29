@@ -1,6 +1,6 @@
 package ru.ioffe.school.susanin.data;
 
-public class Stop extends Node {
+public class Stop extends Point {
 
     final String name;
 
