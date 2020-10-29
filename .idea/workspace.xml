@@ -3,6 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="d3729310-c793-4709-bc65-0dc479fb3a5e" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/Main.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/House.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/MapGraph.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Node.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Path.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Road.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Stop.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Way.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/mapParsing/Parser.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/out/production/Susanin/spb.map" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/resources/spb.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Susanin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Susanin.iml" afterDir="false" />
