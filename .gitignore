@@ -31,5 +31,5 @@
 *.out
 *.app
 
-# Output directories
+# Build output directories
 out/

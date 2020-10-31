@@ -4,7 +4,7 @@ public class Stop extends Point {
 
     final String name;
 
-    public Stop(int id, double lat, double lon, String name) {
+    public Stop(long id, double lat, double lon, String name) {
         super(id, lat, lon);
         this.name = name;
     }

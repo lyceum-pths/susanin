@@ -1,10 +1,6 @@
 package ru.ioffe.school.susanin.mapParsing;
 
-import ru.ioffe.school.susanin.data.Way;
-import ru.ioffe.school.susanin.data.Point;
-import ru.ioffe.school.susanin.data.Road;
-import ru.ioffe.school.susanin.data.Path;
-import ru.ioffe.school.susanin.data.MapGraph;
+import ru.ioffe.school.susanin.data.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -18,7 +14,8 @@ import java.util.HashMap;
 
 public class Parser {
 
-    private static HashMap<Point, Integer> pointCounter = new HashMap<Point, Integer>();
+    private static HashMap<Point, Long> pointsCollection = new HashMap<>();
+
     private enum ObjectToParse {
 
         POINT,
@@ -35,52 +32,59 @@ public class Parser {
             DocumentBuilder dBuilder = factory.newDocumentBuilder();
             Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
-            parse(doc);
+            parsePoints(doc);
+            parseWays(doc);
+            System.out.println("< PARSED >");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void parse(Document doc) {
-        parsePoints(doc);
-    }
-
-    private static void parsePoints(Document doc) {
-        try {
+    private static void parsePoints(Document doc) throws OutOfMemoryError {
+        NodeList nodeList = doc.getElementsByTagName("node");
+        for (int i = 0; i < nodeList.getLength(); i++) {
             ObjectToParse objectToParse = ObjectToParse.POINT;
-            NodeList nodeList = doc.getElementsByTagName("node");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Element node = (Element) nodeList.item(i);
-                String id = node.getAttribute("id");
-                double lat = Double.valueOf(node.getAttribute("lat"));
-                double lon = Double.valueOf(node.getAttribute("lon"));
-                NodeList properties = node.getElementsByTagName("tag");
-                for (int j = 0; j < properties.getLength(); j++) {
-                    Node property = properties.item(j);
-                    if (property.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eProperty = (Element) property;
-                        String key = eProperty.getAttribute("k");
-                        String value = eProperty.getAttribute("v");
-                        if ((key.equals("public_transport") && value.equals("stop_position"))
-                                || key.equals("building")) {
-                            if (key.equals("public_transport")) {
-                                objectToParse = ObjectToParse.STOP;
-                            }
-                            else {
-                                objectToParse = ObjectToParse.HOUSE;
-                            }
-                            for (j = 0; j < properties.getLength(); j++) {
-                                key = eProperty.getAttribute("k");
-                                if (key.equals("name")) {
-                                    String name = eProperty.getAttribute("v");
-                                }
-                            }
+            Element node = (Element) nodeList.item(i);
+            long id = Long.parseLong(node.getAttribute("id"));
+            double lat = Double.parseDouble(node.getAttribute("lat"));
+            double lon = Double.parseDouble(node.getAttribute("lon"));
+            String name = null, street = null, number = null;
+            NodeList properties = node.getElementsByTagName("tag");
+            for (int j = 0; j < properties.getLength(); j++) {
+                Element property = (Element) properties.item(j);
+                String key = property.getAttribute("k");
+                String value = property.getAttribute("v");
+                if ((key.equals("public_transport") && value.equals("stop_position"))
+                        || key.equals("building")) {
+                    if (key.equals("public_transport")) {
+                        objectToParse = ObjectToParse.STOP;
+                    } else {
+                        objectToParse = ObjectToParse.HOUSE;
+                    }
+                    for (j = 0; j < properties.getLength(); j++) {
+                        property = (Element) properties.item(j);
+                        key = property.getAttribute("k");
+                        if (key.equals("name")) {
+                            name = property.getAttribute("v");
+                        } else if (key.equals("addr:street")) {
+                            street = property.getAttribute("v");
+                        } else if (key.equals("addr:housenumber")) {
+                            number = property.getAttribute("v");
                         }
                     }
                 }
             }
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
+            switch (objectToParse) {
+                case POINT:
+                    pointsCollection.put(new Point(id, lat, lon), (long) 0);
+                    break;
+                case STOP:
+                    pointsCollection.put(new Stop(id, lat, lon, name), (long) 2);
+                    break;
+                case HOUSE:
+                    pointsCollection.put(new House(id, lat, lon, number, street, name), (long) 2);
+                    break;
+            }
         }
     }
 
@@ -89,32 +93,28 @@ public class Parser {
         return ways;
     }
 
-    private static ArrayList<Way> getWays(Document doc) throws IOException {
-        try {
-            NodeList nodeList = doc.getElementsByTagName("way");
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                Node road = nodeList.item(i);
-                Element eRoad = (Element) road;
-                NodeList subNodes = ((Element) road).getElementsByTagName("tag");
-                /* temporary work checker */
-                boolean isRoad = false;
-                for (int j = 0; j < subNodes.getLength(); j++) {
-                    Node subNode = subNodes.item(j);
-                    if (subNode.getNodeType() == Node.ELEMENT_NODE) {
-                        Element eSubNode = (Element) subNode;
-                        String attribute1 = eSubNode.getAttribute("k");
-                        String attribute2 = eSubNode.getAttribute("v");
-                        if (attribute1.equals("highway")) {
-                            isRoad = true;
-                        }
-                        if (attribute1.equals("name") && isRoad) {
-                            System.out.println(attribute2);
-                        }
+    private static ArrayList<Way> parseWays(Document doc) {
+        NodeList nodeList = doc.getElementsByTagName("way");
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node road = nodeList.item(i);
+            Element eRoad = (Element) road;
+            NodeList subNodes = ((Element) road).getElementsByTagName("tag");
+            /* temporary work checker */
+            boolean isRoad = false;
+            for (int j = 0; j < subNodes.getLength(); j++) {
+                Node subNode = subNodes.item(j);
+                if (subNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eSubNode = (Element) subNode;
+                    String attribute1 = eSubNode.getAttribute("k");
+                    String attribute2 = eSubNode.getAttribute("v");
+                    if (attribute1.equals("highway")) {
+                        isRoad = true;
+                    }
+                    if (attribute1.equals("name") && isRoad) {
+                        System.out.println(attribute2);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         ArrayList<Way> ways = new ArrayList<>();
         return ways;
