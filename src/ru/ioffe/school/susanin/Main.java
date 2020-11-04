@@ -8,7 +8,7 @@ import java.io.File;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
-        File map = new File("C:/Users/Eugene/Downloads/map3.xml");
+        File map = new File("D:/osm/medium.xml");
         Parser.parse(map);
     }
 }

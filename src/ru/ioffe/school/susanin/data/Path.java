@@ -2,9 +2,9 @@ package ru.ioffe.school.susanin.data;
 
 public class Path extends Way {
 
-    private static final int walkSpeed = 5;
+    final int walkSpeed = 5;
 
-    public Path(double length) {
-        super(length, walkSpeed, false);
+    public Path(long id, double length, long from, long to) {
+        super(id, length, 5, from, to, false);
     }
 }
