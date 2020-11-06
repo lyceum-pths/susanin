@@ -2,27 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3729310-c793-4709-bc65-0dc479fb3a5e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/Main.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/House.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/MapGraph.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Node.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Path.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Road.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Stop.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/data/Way.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/ru/ioffe/school/susanin/mapParsing/Parser.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/Susanin/spb.map" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/spb.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Susanin.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Susanin.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Point.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Stop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Stop.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,32 +19,27 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="D:\Practice\Susanin\.idea" />
-      </set>
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
     </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1jVvk7ZGbBdHSIChp6BBoqAFOQ4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="PropertiesComponent">
-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../xml_test" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="PropertiesComponent">
+    <property name="ChangesTree.GroupingKeys" value="module&#10;directory" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/ru/ioffe/school/susanin" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
@@ -81,7 +59,7 @@
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\Admin\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -98,13 +76,45 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="463" y="106" key="FileChooserDialogImpl" timestamp="1604672420215">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="106" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1604672420215" />
+    <state x="184" y="9" key="SettingsEditor" timestamp="1604672443793">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="184" y="9" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1604672443793" />
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2" timestamp="1604672134907">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1604672134907" />
+    <state x="492" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604671303713">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="492" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1604671303713" />
+    <state x="443" y="153" key="git4idea.ui.GitUnstashDialog" timestamp="1604672112622">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="443" y="153" key="git4idea.ui.GitUnstashDialog/0.0.1366.728@0.0.1366.728" timestamp="1604672112622" />
+    <state x="513" y="155" key="svn.repositoryBrowser" timestamp="1604671586102">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="513" y="155" key="svn.repositoryBrowser/0.0.1366.728@0.0.1366.728" timestamp="1604671586102" />
+    <state x="511" y="138" key="svn4idea.import.options" timestamp="1604671583776">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="511" y="138" key="svn4idea.import.options/0.0.1366.728@0.0.1366.728" timestamp="1604671583776" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
