@@ -13,12 +13,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.events.Attribute;
-import javax.xml.validation.Schema;
-import javax.xml.validation.Validator;
-import javax.xml.validation.ValidatorHandler;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Parser {
@@ -57,8 +53,7 @@ public class Parser {
             Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
             parsePoints(doc, getInterestingPoints(doc));
-            parseRoads(doc);
-            //parseRoutes(doc);
+            parseRoutes(doc);
             System.out.println("< PARSED >");
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +151,7 @@ public class Parser {
         }
     }
 
-    private static void parseRoads(Document doc) {
+    private static void parseRoads(Document doc, HashMap<Long, HashSet<Pair<String, String>>> usedRoads) {
         boolean isRoad;
         String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
                 "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
@@ -202,6 +197,14 @@ public class Parser {
                         }
                     }
                 } else if (key.equals("railway")) {
+                    for (j = 0; j < properties.getLength(); j++) {
+                        property = (Element) properties.item(j);
+                        key = property.getAttribute("k");
+                        value = property.getAttribute("v");
+                        if (key.equals("oneway") && value.equals("yes")) {
+                            isOneway = true;
+                        }
+                    }
                     speed = 50;
                     isRoad = true;
                 }
@@ -225,7 +228,11 @@ public class Parser {
                     length += (Math.hypot(((curLat - prevLat) * 111400), ((curLon - prevLon) * 56000)));
                     if (pointsCollection.contains(new Point(Long.parseLong(pointId), curLat, curLon))) {
                         to = Long.parseLong(pointId);
-                        roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway));
+                        if (usedRoads.get(roadId) != null) {
+                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, usedRoads.get(roadId)));
+                        } else {
+                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway));
+                        }
                         from = to;
                         length = 0.0;
                     }
@@ -235,12 +242,12 @@ public class Parser {
     }
 
     private static void parseRoutes(Document doc) {
-        HashMap<Element, Pair<String , Integer>> roads = new HashMap<>();
-        String[] transportMeans = {"bus", "trolleybus", "tram", "train", "subway"};
+        HashMap<Long, HashSet<Pair<String, String>>> usedRoads = new HashMap<>();
+        String[] transportMeans = {"bus", "trolleybus", "tram", /* "train", */ "subway"};
         NodeList relations = doc.getElementsByTagName("relation");
         int relationsLength = relations.getLength();
-        String transportMean = null;
-        int routeNumber = 0;
+        String transportMean = "foot";
+        String routeNumber = "";
         for (int i = 0; i < relationsLength; i++) {
             Element relation = (Element) relations.item(i);
             NodeList properties = relation.getElementsByTagName("tag");
@@ -249,25 +256,28 @@ public class Parser {
                 String key = property.getAttribute("k");
                 String value = property.getAttribute("v");
                 if (key.equals("ref")) {
-                    routeNumber = Integer.parseInt(value);
+                    routeNumber = value;
                 } else if (key.equals("route") && Arrays.asList(transportMeans).contains(value)) {
                     transportMean = value;
                 }
             }
-            if (transportMean != null && routeNumber != 0) {
+            if (!transportMean.equals("foot") && !routeNumber.equals("")) {
                 NodeList members = relation.getElementsByTagName("member");
                 for (int j = 0; j < members.getLength(); j++) {
                     Element member = (Element) members.item(j);
                     if (member.getAttribute("type").equals("way") && member.getAttribute("role").equals("")) {
-                        Element road = doc.getElementById(member.getAttribute("ref"));
-                        if (road != null) {
-                            roads.put(road, new Pair(transportMean, routeNumber));
+                        long id = Long.parseLong(member.getAttribute("ref"));
+                        HashSet<Pair<String, String>> transportList = new HashSet<>();
+                        if (usedRoads.get(id) != null) {
+                            transportList.addAll(usedRoads.get(id));
                         }
+                        transportList.add(new Pair<>(routeNumber, transportMean));
+                        usedRoads.put(id, transportList);
                     }
                 }
             }
         }
-        //parseRoads();
+        parseRoads(doc, usedRoads);
     }
 }
 
