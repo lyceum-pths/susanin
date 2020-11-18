@@ -1,11 +1,15 @@
 package ru.ioffe.school.susanin.data;
 
+import javafx.util.Pair;
+
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Point {
+public class Point implements Serializable {
 
-    final long id;
-    final double lat, lon;
+    private static final long serialVersionUID = 5889215924698852354L;
+    private final long id;
+    private final double lat, lon;
 
     public Point(long id, double lat, double lon) {
         this.id = id;
@@ -17,12 +21,8 @@ public class Point {
         return id;
     }
 
-    public double getLat() {
-        return lat;
-    }
-
-    public double getLon() {
-        return lon;
+    public Pair<Double, Double> getCoordinate() {
+        return new Pair<>(lat, lon);
     }
 
     @Override

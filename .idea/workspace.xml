@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d3729310-c793-4709-bc65-0dc479fb3a5e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Path.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/spb.map" beforeDir="false" afterPath="$PROJECT_DIR$/data/map.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/House.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Point.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Way.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,7 +37,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="D:/Apache/commons/commons-lang3-3.11/commons-lang3-3.11.jar!/" />
+    <property name="last_opened_file_path" value="D:/osm_features" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -101,7 +103,7 @@
       <configuration name="Application">
         <watch expression="pointsCollection" language="JAVA" />
         <watch expression="roadsCollection" language="JAVA" />
-        <watch expression="usedRoads" language="JAVA" custom="sun.awt.windows.WKeyboardFocusManagerPeer" />
+        <watch expression="isPedestrian" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>

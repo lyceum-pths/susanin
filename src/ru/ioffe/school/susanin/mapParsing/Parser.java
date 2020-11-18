@@ -13,8 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.events.Attribute;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class Parser {
@@ -54,6 +53,8 @@ public class Parser {
             doc.getDocumentElement().normalize();
             parsePoints(doc, getInterestingPoints(doc));
             parseRoutes(doc);
+            new PrintWriter("data/map.data").close();
+            saveData(new File("data/map.data"));
             System.out.println("< PARSED >");
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,15 +153,17 @@ public class Parser {
     }
 
     private static void parseRoads(Document doc, HashMap<Long, HashSet<Pair<String, String>>> usedRoads) {
-        boolean isRoad;
+        boolean isRoad, isPedestrian;
         String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
                 "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
                 "secondary_link", "tertiary_link", "service", "living_street", "footway",
                 "pedestrian", "path", "steps"};
+        String[] pedestrian = {"service", "footway", "pedestrian", "path", "steps"};
         NodeList roads = doc.getElementsByTagName("way");
         int roadsLength = roads.getLength();
         for (int i = 0; i < roadsLength; i++) {
             isRoad = false;
+            isPedestrian = false;
             long roadId, from, to;
             double length = 0.0;
             int speed = 5;
@@ -175,6 +178,9 @@ public class Parser {
                 if (key.equals("highway")) {
                     if (Arrays.asList(roadTypes).contains(value)) {
                         isRoad = true;
+                        if (Arrays.asList(pedestrian).contains(value)) {
+                            isPedestrian = true;
+                        }
                         for (j = 0; j < properties.getLength(); j++) {
                             property = (Element) properties.item(j);
                             key = property.getAttribute("k");
@@ -231,7 +237,7 @@ public class Parser {
                         if (usedRoads.get(roadId) != null) {
                             roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, usedRoads.get(roadId)));
                         } else {
-                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway));
+                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, isPedestrian));
                         }
                         from = to;
                         length = 0.0;
@@ -278,6 +284,25 @@ public class Parser {
             }
         }
         parseRoads(doc, usedRoads);
+    }
+
+    private static void saveData(File file) throws IOException, ClassNotFoundException {
+        FileOutputStream fos = new FileOutputStream(file);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(pointsCollection);
+        oos.writeObject(roadsCollection);
+        oos.flush();
+        oos.close();
+        fos.flush();
+        fos.close();
+        /** for test
+         * HashSet<Point> points = new HashSet<>();
+         * HashSet<Road> roads = new HashSet<>();
+         * FileInputStream fis = new FileInputStream(file);
+         * ObjectInputStream ois = new ObjectInputStream(fis);
+         * points = (HashSet<Point>) ois.readObject();
+         * roads = (HashSet<Road>) ois.readObject();
+         */
     }
 }
 
