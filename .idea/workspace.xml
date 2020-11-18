@@ -10,7 +10,6 @@
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/data/Road.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ru/ioffe/school/susanin/mapParsing/Parser.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,18 +23,29 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="D:\Practice\Susanin\.idea" />
-      </set>
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="MedVAL-na &lt;72570836+medval-na@users.noreply.github.com&gt;" />
+      </list>
     </option>
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProjectId" id="1jVvk7ZGbBdHSIChp6BBoqAFOQ4" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="ChangesTree.GroupingKeys" value="module&#10;directory" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="D:/osm_features" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -73,7 +83,7 @@
     </recent_temporary>
   </component>
   <component name="SvnConfiguration">
-    <configuration />
+    <configuration>C:\Users\Admin\AppData\Roaming\Subversion</configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -83,6 +93,14 @@
       <option name="presentableId" value="Default" />
       <updated>1603902213918</updated>
     </task>
+    <task id="LOCAL-00001" summary="test">
+      <created>1604672600396</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604672600396</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -90,13 +108,54 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="296" y="0" key="CommitChangelistDialog2" timestamp="1604672597749">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="296" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1604672597749" />
+    <state x="463" y="106" key="FileChooserDialogImpl" timestamp="1604672420215">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="106" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1604672420215" />
+    <state x="184" y="9" key="SettingsEditor" timestamp="1604672645191">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="184" y="9" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1604672645191" />
+    <state x="530" y="278" key="VCS.ChangelistChooser" timestamp="1604672476468">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="530" y="278" key="VCS.ChangelistChooser/0.0.1366.728@0.0.1366.728" timestamp="1604672476468" />
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2" timestamp="1604672134907">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="97" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1604672134907" />
+    <state x="492" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604672451757">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="492" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1604672451757" />
+    <state x="443" y="153" key="git4idea.ui.GitUnstashDialog" timestamp="1604672112622">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="443" y="153" key="git4idea.ui.GitUnstashDialog/0.0.1366.728@0.0.1366.728" timestamp="1604672112622" />
+    <state x="513" y="155" key="svn.repositoryBrowser" timestamp="1604671586102">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="513" y="155" key="svn.repositoryBrowser/0.0.1366.728@0.0.1366.728" timestamp="1604671586102" />
+    <state x="511" y="138" key="svn4idea.import.options" timestamp="1604671583776">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="511" y="138" key="svn4idea.import.options/0.0.1366.728@0.0.1366.728" timestamp="1604671583776" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
