@@ -1,32 +1,44 @@
 package ru.ioffe.school.susanin.data;
 
-import javafx.util.Pair;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
 public class Road implements Serializable {
 
     private static final long serialVersionUID = 7821348647156236852L;
+    private static final long dummyRoadId = 1L;
+
     private final long id;
     private final double length;
-    private final long from, to;
-    private int speedLimit;
-    private boolean isOneway;
-    private HashSet<Pair<String, String>> transportMeans;
+    private final long from;
+    private final long to;
+    private final int speedLimit;
+    private final boolean isOneway;
+    private final HashMap<String, String> transportMeans;
+
+    public Road(double length, int speedLimit, long from, long to,
+                boolean isOneway, HashMap<String, String> transportMeans) {
+        this.id = dummyRoadId;
+        this.length = length;
+        this.speedLimit = speedLimit;
+        this.from = from;
+        this.to = to;
+        this.isOneway = isOneway;
+        this.transportMeans = new HashMap<>(transportMeans);
+    }
 
     public Road(long id, double length, int speedLimit, long from, long to,
-                boolean isOneway, HashSet<Pair<String, String>> transportMeans) {
+                boolean isOneway, HashMap<String, String> transportMeans) {
         this.id = id;
         this.length = length;
         this.speedLimit = speedLimit;
         this.from = from;
         this.to = to;
         this.isOneway = isOneway;
-        this.transportMeans = new HashSet<>();
-        this.transportMeans = transportMeans;
+        this.transportMeans = new HashMap<>(transportMeans);
     }
     public Road(long id, double length, int speedLimit, long from, long to,
                 boolean isOneway, boolean isPedestrian) {
@@ -36,20 +48,32 @@ public class Road implements Serializable {
         this.from = from;
         this.to = to;
         this.isOneway = isOneway;
-        this.transportMeans = new HashSet<>();
+        this.transportMeans = new HashMap<>();
         if (isPedestrian) {
-            this.transportMeans.add(new Pair<>("foot", "foot"));
+            this.transportMeans.put("foot", "foot");
         } else {
-            this.transportMeans.add(new Pair<>("car", "car"));
+            this.transportMeans.put("car", "car");
         }
     }
 
-    public void setSpeedLimit(int speedLimit) {
-        this.speedLimit = speedLimit;
+    public long getFrom() {
+        return from;
     }
 
-    public void setOneway(boolean isOneway) {
-        this.isOneway = isOneway;
+    public long getTo() {
+        return to;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public int getSpeedLimit() {
+        return speedLimit;
+    }
+
+    public HashMap<String, String> getTransportMeans() {
+        return transportMeans;
     }
 
     @Override

@@ -1,24 +1,20 @@
 package ru.ioffe.school.susanin.mapParsing;
 
-import javafx.util.Pair;
-
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 import ru.ioffe.school.susanin.data.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import javax.print.DocFlavor;
+import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.events.Attribute;
 import java.io.*;
 import java.util.*;
 
 public class Parser {
 
-    private static HashSet<Point> pointsCollection = new HashSet<>();
+    private static HashMap<Long, Point> pointsCollection = new HashMap<>();
     private static HashSet<Road> roadsCollection = new HashSet<>();
 
     private enum ObjectToParse {
@@ -72,13 +68,14 @@ public class Parser {
                 Element property = (Element) properties.item(j);
                 String key = property.getAttribute("k");
                 String value = property.getAttribute("v");
-                if ((key.equals("public_transport") && value.equals("stop_position"))
-                        || key.equals("building")) {
+                if ((key.equals("public_transport") && (value.equals("stop_position") ||
+                        value.equals("station"))) || key.equals("building")) {
                     pointsCounter.put(point.getAttribute("id"), 2);
                     break;
                 }
             }
         }
+
         NodeList roads = doc.getElementsByTagName("way");
         size = roads.getLength();
         for (int i = 0; i < size; i++) {
@@ -113,8 +110,8 @@ public class Parser {
                     Element property = (Element) properties.item(j);
                     String key = property.getAttribute("k");
                     String value = property.getAttribute("v");
-                    if ((key.equals("public_transport") && value.equals("stop_position"))
-                            || key.equals("building")) {
+                    if ((key.equals("public_transport") && (value.equals("stop_position") ||
+                            value.equals("station"))) || key.equals("building")) {
                         if (key.equals("public_transport")) {
                             objectToParse = ObjectToParse.STOP;
                         } else {
@@ -139,20 +136,20 @@ public class Parser {
                 }
                 switch (objectToParse) {
                     case POINT:
-                        pointsCollection.add(new Point(id, lat, lon));
+                        pointsCollection.put(id, new Point(id, lat, lon));
                         break;
                     case STOP:
-                        pointsCollection.add(new Stop(id, lat, lon, name));
+                        pointsCollection.put(id, new Stop(id, lat, lon, name));
                         break;
                     case HOUSE:
-                        pointsCollection.add(new House(id, lat, lon, number, street, name));
+                        pointsCollection.put(id, new House(id, lat, lon, number, street, name));
                         break;
                 }
             }
         }
     }
 
-    private static void parseRoads(Document doc, HashMap<Long, HashSet<Pair<String, String>>> usedRoads) {
+    private static void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
         boolean isRoad, isPedestrian;
         String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
                 "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
@@ -203,6 +200,11 @@ public class Parser {
                         }
                     }
                 } else if (key.equals("railway")) {
+                    if (value.equals("subway")) {
+                        break;
+                    }
+                    speed = 50;
+                    isRoad = true;
                     for (j = 0; j < properties.getLength(); j++) {
                         property = (Element) properties.item(j);
                         key = property.getAttribute("k");
@@ -211,8 +213,6 @@ public class Parser {
                             isOneway = true;
                         }
                     }
-                    speed = 50;
-                    isRoad = true;
                 }
             }
             if (isRoad) {
@@ -222,7 +222,7 @@ public class Parser {
                 double prevLat = Double.parseDouble(doc.getElementById(Long.toString(from)).getAttribute("lat"));
                 double prevLon = Double.parseDouble(doc.getElementById(Long.toString(from)).getAttribute("lon"));
                 double curLat = prevLat, curLon = prevLon;
-                pointsCollection.add(new Point(from, curLat, curLon));
+                pointsCollection.put(from, new Point(from, curLat, curLon));
                 for (int j = 1; j < refsLength; j++) {
                     Element ref = (Element) refs.item(j);
                     String pointId = ref.getAttribute("ref");
@@ -232,8 +232,8 @@ public class Parser {
                     curLat = Double.parseDouble(point.getAttribute("lat"));
                     curLon = Double.parseDouble(point.getAttribute("lon"));
                     length += (Math.hypot(((curLat - prevLat) * 111400), ((curLon - prevLon) * 56000)));
-                    if (pointsCollection.contains(new Point(Long.parseLong(pointId), curLat, curLon))) {
-                        to = Long.parseLong(pointId);
+                    to = Long.parseLong(pointId);
+                    if (pointsCollection.get(to) != null) {
                         if (usedRoads.get(roadId) != null) {
                             roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, usedRoads.get(roadId)));
                         } else {
@@ -248,7 +248,7 @@ public class Parser {
     }
 
     private static void parseRoutes(Document doc) {
-        HashMap<Long, HashSet<Pair<String, String>>> usedRoads = new HashMap<>();
+        HashMap<Long, HashMap<String, String>> usedRoads = new HashMap<>();
         String[] transportMeans = {"bus", "trolleybus", "tram", /* "train", */ "subway"};
         NodeList relations = doc.getElementsByTagName("relation");
         int relationsLength = relations.getLength();
@@ -273,11 +273,11 @@ public class Parser {
                     Element member = (Element) members.item(j);
                     if (member.getAttribute("type").equals("way") && member.getAttribute("role").equals("")) {
                         long id = Long.parseLong(member.getAttribute("ref"));
-                        HashSet<Pair<String, String>> transportList = new HashSet<>();
+                        HashMap<String, String> transportList = new HashMap<>();
                         if (usedRoads.get(id) != null) {
-                            transportList.addAll(usedRoads.get(id));
+                            transportList.putAll(usedRoads.get(id));
                         }
-                        transportList.add(new Pair<>(routeNumber, transportMean));
+                        transportList.put(routeNumber, transportMean);
                         usedRoads.put(id, transportList);
                     }
                 }
@@ -291,9 +291,7 @@ public class Parser {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(pointsCollection);
         oos.writeObject(roadsCollection);
-        oos.flush();
         oos.close();
-        fos.flush();
         fos.close();
         /** for test
          * HashSet<Point> points = new HashSet<>();
