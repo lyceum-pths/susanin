@@ -22,17 +22,18 @@ public class MapDrawer {
      private static final double maxLat = 59.8438;
      private static final double maxLon = 30.3573;
      */
-    /** For medium
-     private static final double minLat = 59.8283;
-     private static final double minLon = 30.3084;
-     private static final double maxLat = 59.8677;
-     private static final double maxLon = 30.4432;
+    /**
+     * For medium
+     * private static final double minLat = 59.8283;
+     * private static final double minLon = 30.3084;
+     * private static final double maxLat = 59.8677;
+     * private static final double maxLon = 30.4432;
      */
 
-    private static final double minLat = 59.876;
-    private static final double minLon = 30.2059;
-    private static final double maxLat = 59.9894;
-    private static final double maxLon = 30.541;
+    private static final double minLat = 59.79;
+    private static final double minLon = 30.15;
+    private static final double maxLat = 60.11;
+    private static final double maxLon = 30.6;
 
     private BufferedImage mapImage;
     private Graphics2D content;
@@ -59,14 +60,16 @@ public class MapDrawer {
             Point to = points.get(road.getTo());
             double fromX = (from.getLon() - minLon) * lonFactor;
             double fromY = Math.abs((from.getLat() - minLat) * latFactor - mapImage.getHeight());
-            //double fromY = (from.getLat() - minLat) * latFactor;
             double toX = (to.getLon() - minLon) * lonFactor;
             double toY = Math.abs((to.getLat() - minLat) * latFactor - mapImage.getHeight());
-            //double toY = (to.getLat() - minLat) * latFactor;
             if (road.getTransportMeans().equals(Map.of("foot", "foot"))) {
                 content.setColor(Color.PINK);
             } else if (road.getTransportMeans().containsValue("subway")) {
                 content.setColor(Color.CYAN);
+            } else if (road.getTransportMeans().containsValue("train")) {
+                content.setColor(Color.WHITE);
+            } else if (road.getTransportMeans().containsValue("tram")) {
+                content.setColor(Color.RED);
             } else {
                 content.setColor(Color.YELLOW);
             }

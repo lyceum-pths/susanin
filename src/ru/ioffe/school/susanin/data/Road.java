@@ -56,6 +56,10 @@ public class Road implements Serializable {
         }
     }
 
+    public long getId() {
+        return id;
+    }
+
     public long getFrom() {
         return from;
     }

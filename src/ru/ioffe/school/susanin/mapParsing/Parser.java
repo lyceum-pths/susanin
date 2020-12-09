@@ -6,7 +6,6 @@ import ru.ioffe.school.susanin.data.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
-import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -14,8 +13,8 @@ import java.util.*;
 
 public class Parser {
 
-    private static HashMap<Long, Point> pointsCollection = new HashMap<>();
-    private static HashSet<Road> roadsCollection = new HashSet<>();
+    private static final Map<String, Integer> DEFAULT_SPEED_LIMITS = Map.of(
+            "pedestrian", 5, "railway", 50, "urban", 60, "rural", 90, "highway", 110);
 
     private enum ObjectToParse {
 
@@ -24,33 +23,45 @@ public class Parser {
         STOP
     }
 
-    public static void parse(File file) {
+    private HashMap<String, Integer> speedLimits;
+    private HashMap<Long, Point> pointsCollection;
+    private HashSet<Road> roadsCollection;
+
+    public Parser(Map<String, Integer> speedLimits) {
+        this.speedLimits = new HashMap<>(speedLimits);
+        this.pointsCollection = new HashMap<>();
+        this.roadsCollection = new HashSet<>();
+    }
+
+    public Parser() {
+        this.speedLimits = new HashMap<>(DEFAULT_SPEED_LIMITS);
+        this.pointsCollection = new HashMap<>();
+        this.roadsCollection = new HashSet<>();
+    }
+
+    public void parse(File map) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setValidating(true);
             DocumentBuilder dBuilder = factory.newDocumentBuilder();
             dBuilder.setErrorHandler(new ErrorHandler() {
                 @Override
-                public void warning(SAXParseException e) throws SAXException {
-                    //System.err.println("Warning: " + e);
+                public void warning(SAXParseException e) {
                 }
 
                 @Override
-                public void error(SAXParseException e) throws SAXException {
-                    //System.err.println("Error: " + e);
+                public void error(SAXParseException e) {
                 }
 
                 @Override
-                public void fatalError(SAXParseException e) throws SAXException {
+                public void fatalError(SAXParseException e) {
                     System.err.println("Fatal error: " + e);
                 }
             });
-            Document doc = dBuilder.parse(file);
+            Document doc = dBuilder.parse(map);
             doc.getDocumentElement().normalize();
             parsePoints(doc, getInterestingPoints(doc));
             parseRoutes(doc);
-            new PrintWriter("data/map.data").close();
-            saveData(new File("data/map.data"));
             System.out.println("< PARSED >");
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +107,7 @@ public class Parser {
         return pointsCounter.keySet();
     }
 
-    private static void parsePoints(Document doc, Set<String> interestingPoints) {
+    private void parsePoints(Document doc, Set<String> interestingPoints) {
         for (String pointId : interestingPoints) {
             ObjectToParse objectToParse = ObjectToParse.POINT;
             Element point = doc.getElementById(pointId);
@@ -149,7 +160,7 @@ public class Parser {
         }
     }
 
-    private static void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
+    private void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
         boolean isRoad, isPedestrian;
         String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
                 "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
@@ -185,13 +196,13 @@ public class Parser {
                             if (key.equals("maxspeed")) {
                                 switch (value) {
                                     case "RU:urban":
-                                        speed = 60;
+                                        speed = speedLimits.get("urban");
                                         break;
                                     case "RU:rural":
-                                        speed = 90;
+                                        speed = speedLimits.get("rural");
                                         break;
                                     case "RU:motorway":
-                                        speed = 110;
+                                        speed = speedLimits.get("highway");
                                         break;
                                 }
                             } else if (key.equals("oneway") && value.equals("yes")) {
@@ -200,10 +211,11 @@ public class Parser {
                         }
                     }
                 } else if (key.equals("railway")) {
+                    /* what's because subway data in .osm is incorrect */
                     if (value.equals("subway")) {
-                        break;
+                        // break;
                     }
-                    speed = 50;
+                    speed = speedLimits.get("railway");
                     isRoad = true;
                     for (j = 0; j < properties.getLength(); j++) {
                         property = (Element) properties.item(j);
@@ -231,7 +243,7 @@ public class Parser {
                     prevLon = curLon;
                     curLat = Double.parseDouble(point.getAttribute("lat"));
                     curLon = Double.parseDouble(point.getAttribute("lon"));
-                    length += (Math.hypot(((curLat - prevLat) * 111400), ((curLon - prevLon) * 56000)));
+                    length += Math.hypot(((curLat - prevLat) * 111400), ((curLon - prevLon) * 56000));
                     to = Long.parseLong(pointId);
                     if (pointsCollection.get(to) != null) {
                         if (usedRoads.get(roadId) != null) {
@@ -247,14 +259,16 @@ public class Parser {
         }
     }
 
-    private static void parseRoutes(Document doc) {
+    private void parseRoutes(Document doc) {
         HashMap<Long, HashMap<String, String>> usedRoads = new HashMap<>();
-        String[] transportMeans = {"bus", "trolleybus", "tram", /* "train", */ "subway"};
+        String[] transportMeans = {"bus", "trolleybus", "tram", "train", "subway"};
         NodeList relations = doc.getElementsByTagName("relation");
         int relationsLength = relations.getLength();
-        String transportMean = "foot";
-        String routeNumber = "";
+        String transportMean;
+        String routeNumber;
         for (int i = 0; i < relationsLength; i++) {
+            transportMean = "foot";
+            routeNumber = "";
             Element relation = (Element) relations.item(i);
             NodeList properties = relation.getElementsByTagName("tag");
             for (int j = 0; j < properties.getLength(); j++) {
@@ -286,8 +300,8 @@ public class Parser {
         parseRoads(doc, usedRoads);
     }
 
-    private static void saveData(File file) throws IOException, ClassNotFoundException {
-        FileOutputStream fos = new FileOutputStream(file);
+    public void saveData(File data) throws IOException {
+        FileOutputStream fos = new FileOutputStream(data);
         ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(pointsCollection);
         oos.writeObject(roadsCollection);
@@ -302,5 +316,21 @@ public class Parser {
          * roads = (HashSet<Road>) ois.readObject();
          */
     }
-}
 
+    public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads, File data) throws IOException {
+        FileOutputStream fos = new FileOutputStream(data);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(points);
+        oos.writeObject(roads);
+        oos.close();
+        fos.close();
+    }
+
+    public HashMap<Long, Point> getPointsCollection() {
+        return pointsCollection;
+    }
+
+    public HashSet<Road> getRoadsCollection() {
+        return roadsCollection;
+    }
+}
