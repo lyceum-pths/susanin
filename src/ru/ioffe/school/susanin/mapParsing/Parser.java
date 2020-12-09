@@ -15,6 +15,11 @@ public class Parser {
 
     private static final Map<String, Integer> DEFAULT_SPEED_LIMITS = Map.of(
             "pedestrian", 5, "railway", 50, "urban", 60, "rural", 90, "highway", 110);
+    private static final String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
+            "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
+            "secondary_link", "tertiary_link", "service", "living_street", "footway",
+            "pedestrian", "path", "steps"};
+    private static final String[] pedestrian = {"service", "footway", "pedestrian", "path", "steps"};
 
     private enum ObjectToParse {
 
@@ -92,18 +97,14 @@ public class Parser {
         for (int i = 0; i < size; i++) {
             Element road = (Element) roads.item(i);
             NodeList refs = road.getElementsByTagName("nd");
-            for (int j = 0; j < refs.getLength(); j++) {
-                Element ref = (Element) refs.item(j);
-                String id = ref.getAttribute("ref");
-                if (pointsCounter.containsKey(id)) {
-                    int count = pointsCounter.get(id);
-                    pointsCounter.put(id, count + 1);
-                } else {
-                    pointsCounter.put(id, 1);
-                }
-            }
+            Element from = (Element) refs.item(0);
+            Element to = (Element) refs.item(refs.getLength() - 1);
+            String fromId = from.getAttribute("ref");
+            String toId = to.getAttribute("ref");
+            pointsCounter.put(fromId, pointsCounter.getOrDefault(fromId, 0) + 1);
+            pointsCounter.put(toId, pointsCounter.getOrDefault(toId, 0) + 1);
         }
-        pointsCounter.entrySet().removeIf(entry -> pointsCounter.get(((Map.Entry) entry).getKey()) == 1);
+        pointsCounter.entrySet().removeIf(entry -> entry.getValue() == 1);
         return pointsCounter.keySet();
     }
 
@@ -162,11 +163,6 @@ public class Parser {
 
     private void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
         boolean isRoad, isPedestrian;
-        String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
-                "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
-                "secondary_link", "tertiary_link", "service", "living_street", "footway",
-                "pedestrian", "path", "steps"};
-        String[] pedestrian = {"service", "footway", "pedestrian", "path", "steps"};
         NodeList roads = doc.getElementsByTagName("way");
         int roadsLength = roads.getLength();
         for (int i = 0; i < roadsLength; i++) {
