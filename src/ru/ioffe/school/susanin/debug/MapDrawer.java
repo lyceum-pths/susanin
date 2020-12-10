@@ -16,32 +16,26 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class MapDrawer {
-    /**
-     private static final double minLat = 59.8342;
-     private static final double minLon = 30.3236;
-     private static final double maxLat = 59.8438;
-     private static final double maxLon = 30.3573;
-     */
-    /**
-     * For medium
-     * private static final double minLat = 59.8283;
-     * private static final double minLon = 30.3084;
-     * private static final double maxLat = 59.8677;
-     * private static final double maxLon = 30.4432;
-     */
 
-    private static final double minLat = 59.79;
-    private static final double minLon = 30.15;
-    private static final double maxLat = 60.11;
-    private static final double maxLon = 30.6;
+    private final double minLat;
+    private final double minLon;
+    private final double maxLat;
+    private final double maxLon;
+    private final BufferedImage mapImage;
+    private final Graphics2D content;
 
-    private BufferedImage mapImage;
-    private Graphics2D content;
-
-    public MapDrawer(int width, int height) {
-        this.mapImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    public MapDrawer(int width, int height, double minLat, double maxLat, double minLon, double maxLon, boolean isBW) {
+        if (isBW) {
+            this.mapImage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
+        } else {
+            this.mapImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        }
+        this.minLat = minLat;
+        this.maxLat = maxLat;
+        this.minLon = minLon;
+        this.maxLon = maxLon;
         this.content = mapImage.createGraphics();
-        this.content.setStroke(new BasicStroke(0.5f));
+        this.content.setStroke(new BasicStroke(1f));
     }
 
     public void drawImage(File map) throws IOException, ClassNotFoundException {
@@ -73,7 +67,7 @@ public class MapDrawer {
             } else {
                 content.setColor(Color.YELLOW);
             }
-            if (checkBounds(fromX, fromY, toX, toY)) {
+            if (checkBounds(from.getLon(), from.getLat(), to.getLon(), to.getLat())) {
                 content.draw(new Line2D.Double(fromX, fromY, toX, toY));
             }
         }
@@ -84,7 +78,7 @@ public class MapDrawer {
     }
 
     private boolean checkBounds(double fromX, double fromY, double toX, double toY) {
-        return (fromX > 0.0 && fromX < mapImage.getWidth() && toX > 0.0 && toX < mapImage.getWidth() &&
-                fromY > 0.0 && fromY < mapImage.getHeight() && toY > 0.0 && toY < mapImage.getHeight());
+        return (fromX > minLon && fromX < maxLon && toX > minLon && toX < maxLon &&
+                fromY > minLat && fromY < maxLat && toY > minLat && toY < maxLat);
     }
 }

@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
 
@@ -18,8 +19,8 @@ public class Parser {
     private static final String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
             "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
             "secondary_link", "tertiary_link", "service", "living_street", "footway",
-            "pedestrian", "path", "steps"};
-    private static final String[] pedestrian = {"service", "footway", "pedestrian", "path", "steps"};
+            "pedestrian", "path", "steps", "track"};
+    private static final String[] pedestrianTypes = {"service", "footway", "pedestrian", "path", "steps", "track"};
 
     private enum ObjectToParse {
 
@@ -44,33 +45,29 @@ public class Parser {
         this.roadsCollection = new HashSet<>();
     }
 
-    public void parse(File map) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setValidating(true);
-            DocumentBuilder dBuilder = factory.newDocumentBuilder();
-            dBuilder.setErrorHandler(new ErrorHandler() {
-                @Override
-                public void warning(SAXParseException e) {
-                }
+    public void parse(File map, Set<String> POI) throws SAXException, ParserConfigurationException, IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setValidating(true);
+        DocumentBuilder dBuilder = factory.newDocumentBuilder();
+        dBuilder.setErrorHandler(new ErrorHandler() {
+            @Override
+            public void warning(SAXParseException e) {
+            }
 
-                @Override
-                public void error(SAXParseException e) {
-                }
+            @Override
+            public void error(SAXParseException e) {
+            }
 
-                @Override
-                public void fatalError(SAXParseException e) {
-                    System.err.println("Fatal error: " + e);
-                }
-            });
-            Document doc = dBuilder.parse(map);
-            doc.getDocumentElement().normalize();
-            parsePoints(doc, getInterestingPoints(doc));
-            parseRoutes(doc);
-            System.out.println("< PARSED >");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void fatalError(SAXParseException e) {
+                System.err.println("Fatal error: " + e);
+            }
+        });
+        Document doc = dBuilder.parse(map);
+        doc.getDocumentElement().normalize();
+        parsePoints(doc, POI);
+        parseRoutes(doc);
+        System.out.println("< PARSED >");
     }
 
     private static Set<String> getInterestingPoints(Document doc) {
@@ -101,8 +98,8 @@ public class Parser {
             Element to = (Element) refs.item(refs.getLength() - 1);
             String fromId = from.getAttribute("ref");
             String toId = to.getAttribute("ref");
-            pointsCounter.put(fromId, pointsCounter.getOrDefault(fromId, 0) + 1);
-            pointsCounter.put(toId, pointsCounter.getOrDefault(toId, 0) + 1);
+            pointsCounter.put(fromId, pointsCounter.getOrDefault(fromId, 1) + 1);
+            pointsCounter.put(toId, pointsCounter.getOrDefault(toId, 1) + 1);
         }
         pointsCounter.entrySet().removeIf(entry -> entry.getValue() == 1);
         return pointsCounter.keySet();
@@ -112,7 +109,7 @@ public class Parser {
         for (String pointId : interestingPoints) {
             ObjectToParse objectToParse = ObjectToParse.POINT;
             Element point = doc.getElementById(pointId);
-            if (point != null) {
+            if (point != null && point.getTagName().equals("node")) {
                 long id = Long.parseLong(point.getAttribute("id"));
                 double lat = Double.parseDouble(point.getAttribute("lat"));
                 double lon = Double.parseDouble(point.getAttribute("lon"));
@@ -170,7 +167,7 @@ public class Parser {
             isPedestrian = false;
             long roadId, from, to;
             double length = 0.0;
-            int speed = 5;
+            int speed = speedLimits.get("pedestrian");
             boolean isOneway = false;
             Element road = (Element) roads.item(i);
             roadId = Long.parseLong(road.getAttribute("id"));
@@ -182,7 +179,7 @@ public class Parser {
                 if (key.equals("highway")) {
                     if (Arrays.asList(roadTypes).contains(value)) {
                         isRoad = true;
-                        if (Arrays.asList(pedestrian).contains(value)) {
+                        if (Arrays.asList(pedestrianTypes).contains(value)) {
                             isPedestrian = true;
                         }
                         for (j = 0; j < properties.getLength(); j++) {
