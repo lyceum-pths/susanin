@@ -5,6 +5,7 @@ import org.xml.sax.SAXParseException;
 import ru.ioffe.school.susanin.data.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+import ru.ioffe.school.susanin.utils.MapUtils;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -218,7 +219,7 @@ public class Parser {
                     prevLon = curLon;
                     curLat = Double.parseDouble(point.getAttribute("lat"));
                     curLon = Double.parseDouble(point.getAttribute("lon"));
-                    length += Math.hypot(((curLat - prevLat) * 111400), ((curLon - prevLon) * 56000));
+                    length += MapUtils.calcLength(prevLat, prevLon, curLat, curLon);
                     to = Long.parseLong(pointId);
                     if (pointsCollection.get(to) != null) {
                         if (usedRoads.get(roadId) != null) {
@@ -276,12 +277,13 @@ public class Parser {
     }
 
     public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads, File data) throws IOException {
-        FileOutputStream fos = new FileOutputStream(data);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(points);
-        oos.writeObject(roads);
-        oos.close();
-        fos.close();
+        try (
+                FileOutputStream fos = new FileOutputStream(data);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)
+        ) {
+            oos.writeObject(points);
+            oos.writeObject(roads);
+        }
     }
 
     public HashMap<Long, Point> getPointsCollection() {
