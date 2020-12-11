@@ -15,12 +15,14 @@ import java.util.*;
 public class Parser {
 
     private static final Map<String, Integer> DEFAULT_SPEED_LIMITS = Map.of(
-            "pedestrian", 5, "railway", 50, "urban", 60, "rural", 90, "highway", 110);
-    private static final String[] roadTypes = {"motorway", "trunk", "primary", "secondary", "tertiary",
-            "unclassified", "residential", "motorway_link", "trunk_link", "primary_link",
-            "secondary_link", "tertiary_link", "service", "living_street", "footway",
-            "pedestrian", "path", "steps", "track"};
-    private static final String[] pedestrianTypes = {"service", "footway", "pedestrian", "path", "steps", "track"};
+            "pedestrian", 5, "railway", 50, "urban", 60, "rural", 90,
+            "highway", 110);
+    private static final List<String> roadTypes = Arrays.asList(
+            "motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential",
+            "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link",
+            "service", "living_street", "footway", "pedestrian", "path", "steps", "track");
+    private static final List<String> pedestrianTypes = Arrays.asList(
+            "service", "footway", "pedestrian", "path", "steps", "track");
 
     private enum ObjectToParse {
 
@@ -68,41 +70,6 @@ public class Parser {
         parsePoints(doc, POI);
         parseRoutes(doc);
         System.out.println("< PARSED >");
-    }
-
-    private static Set<String> getInterestingPoints(Document doc) {
-        HashMap<String, Integer> pointsCounter = new HashMap<>();
-        NodeList points = doc.getElementsByTagName("node");
-        int size = points.getLength();
-        for (int i = 0; i < size; i++) {
-            Element point = (Element) points.item(i);
-            NodeList properties = point.getElementsByTagName("tag");
-            for (int j = 0; j < properties.getLength(); j++) {
-                Element property = (Element) properties.item(j);
-                String key = property.getAttribute("k");
-                String value = property.getAttribute("v");
-                if ((key.equals("public_transport") && (value.equals("stop_position") ||
-                        value.equals("station"))) || key.equals("building")) {
-                    pointsCounter.put(point.getAttribute("id"), 2);
-                    break;
-                }
-            }
-        }
-
-        NodeList roads = doc.getElementsByTagName("way");
-        size = roads.getLength();
-        for (int i = 0; i < size; i++) {
-            Element road = (Element) roads.item(i);
-            NodeList refs = road.getElementsByTagName("nd");
-            Element from = (Element) refs.item(0);
-            Element to = (Element) refs.item(refs.getLength() - 1);
-            String fromId = from.getAttribute("ref");
-            String toId = to.getAttribute("ref");
-            pointsCounter.put(fromId, pointsCounter.getOrDefault(fromId, 1) + 1);
-            pointsCounter.put(toId, pointsCounter.getOrDefault(toId, 1) + 1);
-        }
-        pointsCounter.entrySet().removeIf(entry -> entry.getValue() == 1);
-        return pointsCounter.keySet();
     }
 
     private void parsePoints(Document doc, Set<String> interestingPoints) {
@@ -158,68 +125,83 @@ public class Parser {
         }
     }
 
-    private void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
-        boolean isRoad, isPedestrian;
-        NodeList roads = doc.getElementsByTagName("way");
-        int roadsLength = roads.getLength();
-        for (int i = 0; i < roadsLength; i++) {
-            isRoad = false;
-            isPedestrian = false;
-            long roadId, from, to;
-            double length = 0.0;
-            int speed = speedLimits.get("pedestrian");
-            boolean isOneway = false;
-            Element road = (Element) roads.item(i);
-            roadId = Long.parseLong(road.getAttribute("id"));
-            NodeList properties = road.getElementsByTagName("tag");
-            for (int j = 0; j < properties.getLength(); j++) {
-                Element property = (Element) properties.item(j);
-                String key = property.getAttribute("k");
-                String value = property.getAttribute("v");
-                if (key.equals("highway")) {
-                    if (Arrays.asList(roadTypes).contains(value)) {
-                        isRoad = true;
-                        if (Arrays.asList(pedestrianTypes).contains(value)) {
-                            isPedestrian = true;
-                        }
-                        for (j = 0; j < properties.getLength(); j++) {
-                            property = (Element) properties.item(j);
-                            key = property.getAttribute("k");
-                            value = property.getAttribute("v");
-                            if (key.equals("maxspeed")) {
-                                switch (value) {
-                                    case "RU:urban":
-                                        speed = speedLimits.get("urban");
-                                        break;
-                                    case "RU:rural":
-                                        speed = speedLimits.get("rural");
-                                        break;
-                                    case "RU:motorway":
-                                        speed = speedLimits.get("highway");
-                                        break;
-                                }
-                            } else if (key.equals("oneway") && value.equals("yes")) {
-                                isOneway = true;
-                            }
-                        }
-                    }
-                } else if (key.equals("railway")) {
-                    /* what's because subway data in .osm is incorrect */
-                    if (value.equals("subway")) {
-                        // break;
-                    }
-                    speed = speedLimits.get("railway");
+    private List<String> parseRoad(Element road) {
+        boolean isRoad = false;
+        boolean isOneway = false;
+        boolean isPedestrian = false;
+        int speed = speedLimits.get("pedestrian");
+        NodeList properties = road.getElementsByTagName("tag");
+        for (int j = 0; j < properties.getLength(); j++) {
+            Element property = (Element) properties.item(j);
+            String key = property.getAttribute("k");
+            String value = property.getAttribute("v");
+            if (key.equals("highway")) {
+                if (roadTypes.contains(value)) {
                     isRoad = true;
+                    if (pedestrianTypes.contains(value)) {
+                        isPedestrian = true;
+                    }
                     for (j = 0; j < properties.getLength(); j++) {
                         property = (Element) properties.item(j);
                         key = property.getAttribute("k");
                         value = property.getAttribute("v");
-                        if (key.equals("oneway") && value.equals("yes")) {
+                        if (key.equals("maxspeed")) {
+                            switch (value) {
+                                case "RU:urban":
+                                    speed = speedLimits.get("urban");
+                                    break;
+                                case "RU:rural":
+                                    speed = speedLimits.get("rural");
+                                    break;
+                                case "RU:motorway":
+                                    speed = speedLimits.get("highway");
+                                    break;
+                            }
+                        } else if (key.equals("oneway") && value.equals("yes")) {
                             isOneway = true;
                         }
                     }
                 }
+            } else if (key.equals("railway")) {
+                /* what's because subway data in .osm is incorrect */
+                /*
+                if (value.equals("subway")) {
+                    break;
+                }
+                */
+                speed = speedLimits.get("railway");
+                isRoad = true;
+                for (j = 0; j < properties.getLength(); j++) {
+                    property = (Element) properties.item(j);
+                    key = property.getAttribute("k");
+                    value = property.getAttribute("v");
+                    if (key.equals("oneway") && value.equals("yes")) {
+                        isOneway = true;
+                    }
+                }
             }
+        }
+        return List.of(Boolean.toString(isRoad), Boolean.toString(isOneway),
+                Boolean.toString(isPedestrian), Integer.toString(speed));
+    }
+
+    private void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
+        boolean isRoad, isPedestrian, isOneway;
+        double length;
+        long roadId, from, to;
+        int speed;
+        List<String> roadParams;
+        NodeList roads = doc.getElementsByTagName("way");
+        int roadsLength = roads.getLength();
+        for (int i = 0; i < roadsLength; i++) {
+            Element road = (Element) roads.item(i);
+            roadParams = parseRoad(road);
+            isRoad = Boolean.parseBoolean(roadParams.get(0));
+            isOneway = Boolean.parseBoolean(roadParams.get(1));
+            isPedestrian = Boolean.parseBoolean(roadParams.get(2));
+            speed = Integer.parseInt(roadParams.get(3));
+            roadId = Long.parseLong(road.getAttribute("id"));
+            length = 0.0;
             if (isRoad) {
                 NodeList refs = road.getElementsByTagName("nd");
                 int refsLength = refs.getLength();
@@ -291,23 +273,6 @@ public class Parser {
             }
         }
         parseRoads(doc, usedRoads);
-    }
-
-    public void saveData(File data) throws IOException {
-        FileOutputStream fos = new FileOutputStream(data);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(pointsCollection);
-        oos.writeObject(roadsCollection);
-        oos.close();
-        fos.close();
-        /** for test
-         * HashSet<Point> points = new HashSet<>();
-         * HashSet<Road> roads = new HashSet<>();
-         * FileInputStream fis = new FileInputStream(file);
-         * ObjectInputStream ois = new ObjectInputStream(fis);
-         * points = (HashSet<Point>) ois.readObject();
-         * roads = (HashSet<Road>) ois.readObject();
-         */
     }
 
     public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads, File data) throws IOException {

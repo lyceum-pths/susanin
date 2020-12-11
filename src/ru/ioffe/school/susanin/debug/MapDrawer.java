@@ -35,7 +35,7 @@ public class MapDrawer {
         this.minLon = minLon;
         this.maxLon = maxLon;
         this.content = mapImage.createGraphics();
-        this.content.setStroke(new BasicStroke(1f));
+        this.content.setStroke(new BasicStroke(0.5f));
     }
 
     public void drawImage(File map) throws IOException, ClassNotFoundException {
@@ -47,8 +47,6 @@ public class MapDrawer {
         ObjectInputStream ois = new ObjectInputStream(fis);
         points = (HashMap<Long, Point>) ois.readObject();
         roads = (HashSet<Road>) ois.readObject();
-        content.setColor(new Color(50, 50, 50));
-        content.fillRect(0, 0, mapImage.getWidth(), mapImage.getHeight());
         for (Road road : roads) {
             Point from = points.get(road.getFrom());
             Point to = points.get(road.getTo());
@@ -56,18 +54,18 @@ public class MapDrawer {
             double fromY = Math.abs((from.getLat() - minLat) * latFactor - mapImage.getHeight());
             double toX = (to.getLon() - minLon) * lonFactor;
             double toY = Math.abs((to.getLat() - minLat) * latFactor - mapImage.getHeight());
-            if (road.getTransportMeans().equals(Map.of("foot", "foot"))) {
-                content.setColor(Color.PINK);
-            } else if (road.getTransportMeans().containsValue("subway")) {
-                content.setColor(Color.CYAN);
-            } else if (road.getTransportMeans().containsValue("train")) {
-                content.setColor(Color.WHITE);
-            } else if (road.getTransportMeans().containsValue("tram")) {
-                content.setColor(Color.RED);
-            } else {
-                content.setColor(Color.YELLOW);
-            }
             if (checkBounds(from.getLon(), from.getLat(), to.getLon(), to.getLat())) {
+                if (road.getTransportMeans().equals(Map.of("foot", "foot"))) {
+                    content.setColor(Color.PINK);
+                } else if (road.getTransportMeans().containsValue("subway")) {
+                    content.setColor(Color.CYAN);
+                } else if (road.getTransportMeans().containsValue("train")) {
+                    content.setColor(Color.WHITE);
+                } else if (road.getTransportMeans().containsValue("tram")) {
+                    content.setColor(Color.RED);
+                } else {
+                    content.setColor(Color.YELLOW);
+                }
                 content.draw(new Line2D.Double(fromX, fromY, toX, toY));
             }
         }

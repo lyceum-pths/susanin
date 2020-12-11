@@ -48,16 +48,16 @@ public class Main {
                 e.printStackTrace();
             }
         }
-        /*
+
         MapDrawer mapDrawer = new MapDrawer(3072, 1920, 59.75, 60.13,
-                29.6, 30.62, true);
+                29.6, 30.62, false);
         try {
             mapDrawer.drawImage(new File("data\\map.data"));
-            mapDrawer.saveImage(new File("C:\\Users\\Eugene\\Desktop\\spbfullBW_img.bmp"));
+            mapDrawer.saveImage(new File("C:\\Users\\Eugene\\Desktop\\spbfull_img.bmp"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-         */
+        /*
         MapDrawer mapDrawer = new MapDrawer(3840, 1280, 59.91, 59.98,
                 30.1, 30.6, true);
         try {
@@ -66,5 +66,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 }
