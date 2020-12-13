@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"ru.ioffe.school.susanin"},{"l":"ru.ioffe.school.susanin.data"},{"l":"ru.ioffe.school.susanin.debug"},{"l":"ru.ioffe.school.susanin.mapParsing"},{"l":"ru.ioffe.school.susanin.utils"}]

@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Parses source file and gives a {@link java.util.Set}
+ * of points which are needed during map parsing.
+ */
 public class POIParser {
 
     private Set<String> POI;
@@ -25,6 +29,15 @@ public class POIParser {
         this.POI = new HashSet<>();
     }
 
+    /**
+     * Creates a {@link org.w3c.dom.Document} from source file
+     * and initiates map preparsing sequence.
+     *
+     * @param source file with needed data
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws IOException
+     */
     public void parse(File source) throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(true);
@@ -80,6 +93,12 @@ public class POIParser {
         POI = pointsCounter.keySet();
     }
 
+    /**
+     * Returns {@link java.util.Set} of points
+     * which are needed during map parsing.
+     *
+     * @return set of points needed during map parsing
+     */
     public Set<String> getPOI() {
         return POI;
     }

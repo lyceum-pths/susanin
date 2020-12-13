@@ -13,6 +13,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Parses the map into collections of points and roads
+ * and saves the parsing result to a file.
+ */
 public class Parser {
 
     private static final Map<String, Integer> DEFAULT_SPEED_LIMITS = Map.of(
@@ -36,18 +40,36 @@ public class Parser {
     private HashMap<Long, Point> pointsCollection;
     private HashSet<Road> roadsCollection;
 
+    /**
+     * Constructs a Parser with specific road speed parameters.
+     *
+     * @param speedLimits a map of road types and speeds for them
+     */
     public Parser(Map<String, Integer> speedLimits) {
         this.speedLimits = new HashMap<>(speedLimits);
         this.pointsCollection = new HashMap<>();
         this.roadsCollection = new HashSet<>();
     }
 
+    /**
+     * Constructs a Parser with default road speed parameters.
+     */
     public Parser() {
         this.speedLimits = new HashMap<>(DEFAULT_SPEED_LIMITS);
         this.pointsCollection = new HashMap<>();
         this.roadsCollection = new HashSet<>();
     }
 
+    /**
+     * Creates a {@link org.w3c.dom.Document} from map file
+     * and initiates map parsing sequence.
+     *
+     * @param map map file to parse
+     * @param POI points that are needed during parsing
+     * @throws SAXException
+     * @throws ParserConfigurationException
+     * @throws IOException
+     */
     public void parse(File map, Set<String> POI) throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(true);
@@ -73,8 +95,8 @@ public class Parser {
         System.out.println("< PARSED >");
     }
 
-    private void parsePoints(Document doc, Set<String> interestingPoints) {
-        for (String pointId : interestingPoints) {
+    private void parsePoints(Document doc, Set<String> POI) {
+        for (String pointId : POI) {
             ObjectToParse objectToParse = ObjectToParse.POINT;
             Element point = doc.getElementById(pointId);
             if (point != null && point.getTagName().equals("node")) {
@@ -164,7 +186,7 @@ public class Parser {
                     }
                 }
             } else if (key.equals("railway")) {
-                /* what's because subway data in .osm is incorrect */
+                // what's because subway data in .osm is incorrect
                 /*
                 if (value.equals("subway")) {
                     break;
@@ -276,6 +298,14 @@ public class Parser {
         parseRoads(doc, usedRoads);
     }
 
+    /**
+     * Saves parsed data to file.
+     *
+     * @param points points to save
+     * @param roads roads to save
+     * @param data file to save data in
+     * @throws IOException
+     */
     public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads, File data) throws IOException {
         try (
                 FileOutputStream fos = new FileOutputStream(data);
@@ -286,10 +316,20 @@ public class Parser {
         }
     }
 
+    /**
+     * Returns {@link java.util.HashMap} of parsed and stored in this class points and their ids.
+     *
+     * @return a map of parsed points stored in this class
+     */
     public HashMap<Long, Point> getPointsCollection() {
         return pointsCollection;
     }
 
+    /**
+     * Returns {@link java.util.HashSet} of parsed and stored in this class roads.
+     *
+     * @return a set of parsed roads stored in this class
+     */
     public HashSet<Road> getRoadsCollection() {
         return roadsCollection;
     }

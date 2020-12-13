@@ -10,9 +10,16 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
+/**
+ * Main program class.
+ */
 public class Main {
+    /**
+     * Main program method.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         System.out.println("Need to parse new file?\n\"y\" for yes \"n\" for no");
@@ -31,8 +38,6 @@ public class Main {
                 HashSet<String> POI = new HashSet<>();
                 POI.addAll(poiParser1.getPOI());
                 POI.addAll(poiParser2.getPOI());
-                poiParser1 = null;
-                poiParser2 = null;
                 Parser north = new Parser();
                 Parser south = new Parser();
                 north.parse(part1, POI);
