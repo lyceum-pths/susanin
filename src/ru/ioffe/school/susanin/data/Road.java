@@ -156,7 +156,8 @@ public class Road implements Serializable {
         if (!(obj instanceof Road)) {
             return false;
         }
-        return ((id == ((Road) obj).id) && (from == ((Road) obj).from) && (to == ((Road) obj).to));
+        return ((id == ((Road) obj).id) &&
+                (from == ((Road) obj).from) && (to == ((Road) obj).to));
     }
 
     @Override

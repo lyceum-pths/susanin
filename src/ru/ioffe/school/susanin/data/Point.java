@@ -17,7 +17,7 @@ public class Point implements Serializable {
     /**
      * Constructs Point with id and coordinates
      *
-     * @param id point id
+     * @param id  point id
      * @param lat point latitude
      * @param lon point longitude
      */
@@ -59,11 +59,12 @@ public class Point implements Serializable {
         if (!(obj instanceof Point)) {
             return false;
         }
-        return id == ((Point) obj).id;
+        return (id == ((Point) obj).id) &&
+                (lat == ((Point) obj).lat) && (lon == ((Point) obj).lon);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lat, lon);
+        return Objects.hashCode(id);
     }
 }
