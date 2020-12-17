@@ -7,6 +7,8 @@ import ru.ioffe.school.susanin.mapParsing.POIParser;
 import ru.ioffe.school.susanin.mapParsing.Parser;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -33,39 +35,39 @@ public class Main {
                 HashSet<String> POI = new HashSet<>();
 
                 // Getting first set of POIs
-                File poi1 = new File(MAP_RESOURCES_DIR + "preparse1.xml");
-                POIParser poiParser1 = new POIParser();
-                poiParser1.parse(poi1);
-                POI.addAll(poiParser1.getPOI());
+                Path poiWest = Paths.get(MAP_RESOURCES_DIR + "preparse1.xml");
+                POIParser poiParserWest = new POIParser();
+                poiParserWest.parse(poiWest);
+                POI.addAll(poiParserWest.getPOI());
 
                 // Getting second set of POIs
-                File poi2 = new File(MAP_RESOURCES_DIR + "preparse2.xml");
-                POIParser poiParser2 = new POIParser();
-                poiParser2.parse(poi2);
-                POI.addAll(poiParser2.getPOI());
+                Path poiEast = Paths.get(MAP_RESOURCES_DIR + "preparse2.xml");
+                POIParser poiParserEast = new POIParser();
+                poiParserEast.parse(poiEast);
+                POI.addAll(poiParserEast.getPOI());
 
-                poiParser1 = null;
-                poiParser2 = null;
+                poiParserWest = null;
+                poiParserEast = null;
 
                 HashMap<Long, Point> points = new HashMap<>();
                 HashSet<Road> roads = new HashSet<>();
 
                 // Parsing first part of map and getting points and roads
-                File part1 = new File(MAP_RESOURCES_DIR + "part1.xml");
-                Parser parser1 = new Parser();
-                parser1.parse(part1, POI);
-                points.putAll(parser1.getPointsCollection());
-                roads.addAll(parser1.getRoadsCollection());
+                Path westPart = Paths.get(MAP_RESOURCES_DIR + "part1.xml");
+                Parser parserWest = new Parser();
+                parserWest.parse(westPart, POI);
+                points.putAll(parserWest.getPointsCollection());
+                roads.addAll(parserWest.getRoadsCollection());
 
                 // Parsing second part of map and getting points and roads
-                File part2 = new File(MAP_RESOURCES_DIR + "part2.xml");
-                Parser parser2 = new Parser();
-                parser2.parse(part2, POI);
-                points.putAll(parser2.getPointsCollection());
-                roads.addAll(parser2.getRoadsCollection());
+                Path eastPart = Paths.get(MAP_RESOURCES_DIR + "part2.xml");
+                Parser parserEast = new Parser();
+                parserEast.parse(eastPart, POI);
+                points.putAll(parserEast.getPointsCollection());
+                roads.addAll(parserEast.getRoadsCollection());
 
                 // Saving point and roads to a file
-                File data = new File("data\\map.data");
+                Path data = Paths.get("data\\map.data");
                 Parser.saveData(points, roads, data);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -75,8 +77,8 @@ public class Main {
         MapDrawer mapDrawer = new MapDrawer(2048, 1080, 59.75, 60.13,
                 29.6, 30.62, false);
         try {
-            mapDrawer.drawImage(new File("data\\map.data"));
-            mapDrawer.saveImage(new File("map_images\\spb.bmp"));
+            mapDrawer.drawImage(Paths.get("data\\map.data"));
+            mapDrawer.saveImage("spb");
         } catch (Exception e) {
             e.printStackTrace();
         }

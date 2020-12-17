@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,12 +34,12 @@ public class POIParser {
      * Creates a {@link org.w3c.dom.Document} from source file
      * and initiates map preparsing sequence.
      *
-     * @param source file with needed data
+     * @param sourcePath path to file with needed data
      * @throws SAXException
      * @throws ParserConfigurationException
      * @throws IOException
      */
-    public void parse(File source) throws SAXException, ParserConfigurationException, IOException {
+    public void parse(Path sourcePath) throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(true);
         DocumentBuilder dBuilder = factory.newDocumentBuilder();
@@ -56,7 +57,7 @@ public class POIParser {
                 System.err.println("Fatal error: " + e);
             }
         });
-        Document doc = dBuilder.parse(source);
+        Document doc = dBuilder.parse(sourcePath.toFile());
         doc.getDocumentElement().normalize();
 
         HashMap<String, Integer> pointsCounter = new HashMap<>();

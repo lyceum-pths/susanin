@@ -11,6 +11,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -36,9 +37,9 @@ public class Parser {
         STOP
     }
 
-    private HashMap<String, Integer> speedLimits;
-    private HashMap<Long, Point> pointsCollection;
-    private HashSet<Road> roadsCollection;
+    private final HashMap<String, Integer> speedLimits;
+    private final HashMap<Long, Point> pointsCollection;
+    private final HashSet<Road> roadsCollection;
 
     /**
      * Constructs a Parser with specific road speed parameters.
@@ -64,13 +65,13 @@ public class Parser {
      * Creates a {@link org.w3c.dom.Document} from map file
      * and initiates map parsing sequence.
      *
-     * @param map map file to parse
-     * @param POI points that are needed during parsing
+     * @param mapPath path to map file to parse
+     * @param POI     points that are needed during parsing
      * @throws SAXException
      * @throws ParserConfigurationException
      * @throws IOException
      */
-    public void parse(File map, Set<String> POI) throws SAXException, ParserConfigurationException, IOException {
+    public void parse(Path mapPath, Set<String> POI) throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setValidating(true);
         DocumentBuilder dBuilder = factory.newDocumentBuilder();
@@ -84,11 +85,11 @@ public class Parser {
             }
 
             @Override
-            public void fatalError(SAXParseException e) {
-                System.err.println("Fatal error: " + e);
+            public void fatalError(SAXParseException e) throws SAXParseException {
+                throw e;
             }
         });
-        Document doc = dBuilder.parse(map);
+        Document doc = dBuilder.parse(mapPath.toFile());
         doc.getDocumentElement().normalize();
         parsePoints(doc, POI);
         parseRoutes(doc);
@@ -186,12 +187,10 @@ public class Parser {
                     }
                 }
             } else if (key.equals("railway")) {
-                // what's because subway data in .osm is incorrect
-                /*
+                // That's because subway data in .osm is incorrect
                 if (value.equals("subway")) {
                     break;
                 }
-                */
                 speed = speedLimits.get("railway");
                 isRoad = true;
                 for (j = 0; j < properties.getLength(); j++) {
@@ -303,12 +302,13 @@ public class Parser {
      *
      * @param points points to save
      * @param roads roads to save
-     * @param data file to save data in
+     * @param dataPath path to file to save data in
      * @throws IOException
      */
-    public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads, File data) throws IOException {
+    public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads,
+                                Path dataPath) throws IOException {
         try (
-                FileOutputStream fos = new FileOutputStream(data);
+                FileOutputStream fos = new FileOutputStream(dataPath.toFile());
                 ObjectOutputStream oos = new ObjectOutputStream(fos)
         ) {
             oos.writeObject(points);

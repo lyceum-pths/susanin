@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,13 +32,13 @@ public class MapDrawer {
      * Constructs MapDrawer with specific
      * map image parameters.
      *
-     * @param width image width
+     * @param width  image width
      * @param height image height
      * @param minLat lower latitude bound of map part to draw
      * @param maxLat upper latitude bound of map part to draw
      * @param minLon lower longitude bound of map part to draw
      * @param maxLon upper longitude bound of map part to draw
-     * @param isBW true if image is black&amp;white, false otherwise
+     * @param isBW   true if image is black&amp;white, false otherwise
      */
     public MapDrawer(int width, int height, double minLat, double maxLat, double minLon, double maxLon, boolean isBW) {
         if (isBW) {
@@ -56,16 +57,16 @@ public class MapDrawer {
     /**
      * Draws a specific map part image.
      *
-     * @param map file with map data
+     * @param mapPath path to file with map data
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void drawImage(File map) throws IOException, ClassNotFoundException {
+    public void drawImage(Path mapPath) throws IOException, ClassNotFoundException {
         double latFactor = mapImage.getHeight() / (maxLat - minLat);
         double lonFactor = mapImage.getWidth() / (maxLon - minLon);
         HashMap<Long, Point> points;
         HashSet<Road> roads;
-        FileInputStream fis = new FileInputStream(map);
+        FileInputStream fis = new FileInputStream(mapPath.toFile());
         ObjectInputStream ois = new ObjectInputStream(fis);
         points = (HashMap<Long, Point>) ois.readObject();
         roads = (HashSet<Road>) ois.readObject();
@@ -94,13 +95,13 @@ public class MapDrawer {
     }
 
     /**
-     * Save a map image to a file.
+     * Saves map image to a file.
      *
-     * @param file file to save map image in
+     * @param name name of image to save
      * @throws IOException
      */
-    public void saveImage(File file) throws IOException {
-        ImageIO.write(mapImage, "bmp", file);
+    public void saveImage(String name) throws IOException {
+        ImageIO.write(mapImage, "bmp", new File("map_images\\" + name + ".bmp"));
     }
 
     private boolean checkBounds(double fromX, double fromY, double toX, double toY) {
