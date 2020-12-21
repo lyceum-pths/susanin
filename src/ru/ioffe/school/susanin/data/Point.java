@@ -27,6 +27,9 @@ public class Point implements Serializable {
         this.lon = lon;
     }
 
+    public Point(int id, int code, String name, double lat, double lon, String type) {
+    } // stop have 3 new parameters
+
     /**
      * Returns id of this point.
      *

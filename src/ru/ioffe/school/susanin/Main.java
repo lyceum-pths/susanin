@@ -6,12 +6,13 @@ import ru.ioffe.school.susanin.debug.MapDrawer;
 import ru.ioffe.school.susanin.mapParsing.POIParser;
 import ru.ioffe.school.susanin.mapParsing.Parser;
 
-import java.io.File;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
+
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+
 
 /**
  * Main program class.
@@ -26,7 +27,8 @@ public class Main {
      *
      * @param args command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
+
         Scanner in = new Scanner(System.in);
         System.out.println("Need to parse new file?\ntype \"y\" for yes");
         String choice = in.nextLine();
