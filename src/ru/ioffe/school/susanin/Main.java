@@ -30,7 +30,8 @@ public class Main {
     public static void main(String[] args){
 
         Scanner in = new Scanner(System.in);
-        System.out.println("Need to parse new file?\ntype \"y\" for yes");
+        System.out.println("Need to parse new file?\ntype \"y\" for yes\n" +
+                "!!! Spb is parsed. Don't parse again !!!");
         String choice = in.nextLine();
         if (choice.equals("y")) {
             try {
@@ -76,6 +77,7 @@ public class Main {
             }
         }
 
+        /*
         MapDrawer mapDrawer = new MapDrawer(2048, 1080, 59.75, 60.13,
                 29.6, 30.62, false);
         try {
@@ -84,5 +86,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        */
     }
 }
