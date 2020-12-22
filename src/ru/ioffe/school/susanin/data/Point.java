@@ -56,7 +56,6 @@ public class Point implements Serializable {
     }
 
 
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Point)) {

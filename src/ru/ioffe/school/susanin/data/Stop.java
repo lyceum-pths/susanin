@@ -13,23 +13,18 @@ public class Stop extends Point {
 
     /**
      * Constructs Stop with specific parameters.
-     *  @param id   stop id
+     *
+     * @param id   stop id
      * @param lat  stop latitude
      * @param lon  stop longitude
      * @param name stop name
-     * @param code
      */
-    public Stop(long id, double lat, double lon, String name, int code) {
+    public Stop(long id, double lat, double lon, String name) {
         super(id, lat, lon);
         this.name = name;
         this.code = 0;
         this.type = "0";
     }
-
-    public String getStop_name() {
-        return name;
-    }
-
 
     public Stop(long id, int code, String name, double lat, double lon, String type) {
         super(id, lat, lon);
@@ -38,17 +33,15 @@ public class Stop extends Point {
         this.type = type;
     }
 
-
-    public int getStops_code() {
-        return code;
-    }
-
-    public String getStops_name() {
+    public String getName() {
         return name;
     }
 
+    public int getCode() {
+        return code;
+    }
 
-    public String getTransport_type() {
+    public String getType() {
         return type;
     }
 
