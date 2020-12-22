@@ -15,10 +15,10 @@ public class CreatingCsvMapping {
         final CsvParser parser = new CsvParser();
 
         final Path stopsPath = Paths.get("stops.txt");
-        final List<Stops> stops = parser.parseStop(stopsPath);
-        final Map<Integer, Stops> stopsById = new HashMap<Integer, Stops>();
-        for (Stops stops1 : stops) {
-            stopsById.put(stops1.getStops_id(), stops1);
+        final List<Stop> stops = parser.parseStop(stopsPath);
+        final Map<Long, Stop> stopsById = new HashMap<Long, Stop>();
+        for (Stop stops1 : stops) {
+            stopsById.put(stops1.getId(), stops1);
         }
 
         final Path routesPath = Paths.get("routes.txt");

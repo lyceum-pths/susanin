@@ -27,21 +27,21 @@ public class CsvParser {
 
 
 
-    public List<Stops> parseStop(Path path) throws IOException, CsvValidationException {
-        final List<Stops> result = new ArrayList<>();
+    public List<Stop> parseStop(Path path) throws IOException, CsvValidationException {
+        final List<Stop> result = new ArrayList<>();
 
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
 
-                int id = Integer.parseInt(data[0]);
+                long id = Integer.parseInt(data[0]);
                 int code = Integer.parseInt(data[1]);
                 String name = data[2];
                 double lat = Double.parseDouble(data[3]);
                 double lon = Double.parseDouble(data[4]);
                 String type = data[7];
 
-                result.add(new Stops(id, code, name, lat, lon, type));
+                result.add(new Stop(id, code, name, lat, lon, type));
 
             }
             return result;
