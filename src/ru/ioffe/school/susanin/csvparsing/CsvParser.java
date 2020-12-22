@@ -2,10 +2,7 @@ package ru.ioffe.school.susanin.csvparsing;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import ru.ioffe.school.susanin.data.Routes;
-import ru.ioffe.school.susanin.data.Stop;
-import ru.ioffe.school.susanin.data.StopTimes;
-import ru.ioffe.school.susanin.data.Trips;
+import ru.ioffe.school.susanin.data.*;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,17 +25,10 @@ public class CsvParser {
         this(StandardCharsets.UTF_8);
     }
 
-    private enum ObjectToParse {
 
-        Routes,
-        Stop,
-        StopTimes,
-        Trips
 
-    }
-
-    public List<Stop> parseStop(Path path) throws IOException, CsvValidationException {
-        final List<Stop> result = new ArrayList<>();
+    public List<Stops> parseStop(Path path) throws IOException, CsvValidationException {
+        final List<Stops> result = new ArrayList<>();
 
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
@@ -51,7 +41,7 @@ public class CsvParser {
                 double lon = Double.parseDouble(data[4]);
                 String type = data[7];
 
-                result.add(new Stop(id, code, name, lat, lon, type));
+                result.add(new Stops(id, code, name, lat, lon, type));
 
             }
             return result;

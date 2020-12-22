@@ -1,10 +1,7 @@
 package ru.ioffe.school.susanin.csvparsing;
 
 import com.opencsv.exceptions.CsvValidationException;
-import ru.ioffe.school.susanin.data.Routes;
-import ru.ioffe.school.susanin.data.Stop;
-import ru.ioffe.school.susanin.data.StopTimes;
-import ru.ioffe.school.susanin.data.Trips;
+import ru.ioffe.school.susanin.data.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,10 +15,10 @@ public class CreatingCsvMapping {
         final CsvParser parser = new CsvParser();
 
         final Path stopsPath = Paths.get("stops.txt");
-        final List<Stop> stops = parser.parseStop(stopsPath);
-        final Map<Integer, Stop> stopsById = new HashMap<Integer, Stop>();
-        for (Stop stops1 : stops) {
-            stopsById.put(stops1.getStop_id(), stops1);
+        final List<Stops> stops = parser.parseStop(stopsPath);
+        final Map<Integer, Stops> stopsById = new HashMap<Integer, Stops>();
+        for (Stops stops1 : stops) {
+            stopsById.put(stops1.getStops_id(), stops1);
         }
 
         final Path routesPath = Paths.get("routes.txt");
