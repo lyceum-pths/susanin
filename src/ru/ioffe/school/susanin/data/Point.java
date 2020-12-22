@@ -11,8 +11,12 @@ public class Point implements Serializable {
     private static final long serialVersionUID = 5889215924698852354L;
 
     private final long id;
+    private final int code;
+    private final String name;
     private final double lat;
     private final double lon;
+    private final String type;
+
 
     /**
      * Constructs Point with id and coordinates
@@ -21,10 +25,13 @@ public class Point implements Serializable {
      * @param lat point latitude
      * @param lon point longitude
      */
-    public Point(long id, double lat, double lon) {
+    public Point(long id, int code, String name, double lat, double lon, String type) {
         this.id = id;
+        this.code = code;
+        this.name = name;
         this.lat = lat;
         this.lon = lon;
+        this.type = type;
     }
 
     /**
@@ -52,6 +59,18 @@ public class Point implements Serializable {
      */
     public double getLon() {
         return lon;
+    }
+
+    public int getStop_code() {
+        return code;
+    }
+
+    public String getStop_name() {
+        return name;
+    }
+
+    public String getTransport_type() {
+        return type;
     }
 
     @Override
