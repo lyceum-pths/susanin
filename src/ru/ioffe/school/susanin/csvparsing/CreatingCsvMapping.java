@@ -42,17 +42,19 @@ public class CreatingCsvMapping {
         final List<StopTimes> stop_times = parser.parseStopTimes(stop_timesPath);
         final Map<Integer, Integer> stop_sequenceById = new HashMap<Integer, Integer>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_sequenceById.put(stop_times1.getStop_sequence(), stop_times1.getStop_id());
+            stop_sequenceById.put(stop_times1.getStop_id(), stop_times1.getStop_sequence() );
         } // map for sequences
 
 
-        final Map<String, String> stop_timesById = new HashMap<String, String>();
+        final Map<Integer, String> stop_arrivalById = new HashMap<Integer, String>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_timesById.put(stop_times1.getArrival(), stop_times1.getDeparture());
-        } //map for stop times
+            stop_arrivalById.put(stop_times1.getStop_id(), stop_times1.getArrival());
+        }//map for arrival time
 
-
-
+        final Map<Integer, String> stop_departureById = new HashMap<Integer, String>();
+        for (StopTimes stop_times1 : stop_times) {
+            stop_departureById.put(stop_times1.getStop_id(), stop_times1.getDeparture());
+        }//map for departure time
 
     }
 }
