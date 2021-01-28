@@ -24,18 +24,18 @@ public class CreatingCsvMapping {
 
         final Path routesPath = Paths.get("routes.txt");
         final List<Routes> routes = parser.parseRoutes(routesPath);
-        final Map<Integer, Routes> routesById = new HashMap<Integer, Routes>();
+        final Map<Integer, String> routesById = new HashMap<Integer, String>();
         for (Routes routes1 : routes) {
-            routesById.put(routes1.getRoute_id(), routes1);
-        }
+            routesById.put(routes1.getRoute_id(), routes1.getRoute_type());
+        }//map for type
 
 
         final Path tripsPath = Paths.get("trips.txt");
         final List<Trips> trips = parser.parseTrips(tripsPath);
         final Map<Integer, Integer> tripsById = new HashMap<Integer, Integer>();
         for (Trips trips1 : trips) {
-            tripsById.put(trips1.getRoute_id(), trips1.getTrip_id());
-        }
+            tripsById.put(trips1.getTrip_id(), trips1.getRoute_id());
+        }//map for type
 
 
         final Path stop_timesPath = Paths.get("stop_times.txt");
@@ -55,6 +55,11 @@ public class CreatingCsvMapping {
         for (StopTimes stop_times1 : stop_times) {
             stop_departureById.put(stop_times1.getStop_id(), stop_times1.getDeparture());
         }//map for departure time
+
+        final Map<Integer, Integer> stop_typeById = new HashMap<Integer, Integer>();
+        for (StopTimes stop_times1 : stop_times) {
+            stop_typeById.put(stop_times1.getStop_id(), stop_times1.getTrip_id() );
+        } // map for type
 
     }
 }
