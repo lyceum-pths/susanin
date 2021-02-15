@@ -24,14 +24,12 @@ public class CsvParser {
         this(StandardCharsets.UTF_8);
     }
 
-
-    public List<Stop> parseStop(Path path) throws IOException, CsvValidationException {
+    public List<Stop> parseStops(Path path) throws IOException, CsvValidationException {
         final List<Stop> result = new ArrayList<>();
 
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
-
                 long id = Integer.parseInt(data[0]);
                 int code = Integer.parseInt(data[1]);
                 String name = data[2];
@@ -40,7 +38,6 @@ public class CsvParser {
                 String type = data[7];
 
                 result.add(new Stop(id, code, name, lat, lon, type));
-
             }
             return result;
         }
@@ -54,6 +51,7 @@ public class CsvParser {
                 int routeId = Integer.parseInt(data[0]);
                 String routeName = data[1];
                 String routeType = data[4];
+
                 result.add(new Routes(routeId, routeName, routeType));
             }
         }
@@ -67,6 +65,7 @@ public class CsvParser {
             for (String[] data : reader) {
                 int routeId = Integer.parseInt(data[0]);
                 int tripId = Integer.parseInt(data[2]);
+
                 result.add(new Trips(routeId, tripId));
             }
         }
@@ -89,5 +88,4 @@ public class CsvParser {
         }
         return result;
     }
-
 }
