@@ -1,27 +1,27 @@
 package ru.ioffe.school.susanin.data;
 
 public class Trips {
-    private final int route_id;
-    private final int trip_id;
+    private final int routeId;
+    private final int tripId;
 
-    public Trips(int route_id, int trip_id) {
-        this.route_id = route_id;
-        this.trip_id = trip_id;
+    public Trips(int routeId, int tripId) {
+        this.routeId = routeId;
+        this.tripId = tripId;
     }
 
-    public int getRoute_id() {
-        return route_id;
+    public int getRouteId() {
+        return routeId;
     }
 
-    public int getTrip_id() {
-        return trip_id;
+    public int getTripId() {
+        return tripId;
     }
 
     @Override
     public String toString() {
         return "Trips{" + System.lineSeparator() +
-                "\troute_id=" + route_id + System.lineSeparator() +
-                "\ttrip_id='" + trip_id + '\'' + System.lineSeparator() +
+                "\troute_id=" + routeId + System.lineSeparator() +
+                "\ttrip_id='" + tripId + '\'' + System.lineSeparator() +
                 '}';
     }
 }

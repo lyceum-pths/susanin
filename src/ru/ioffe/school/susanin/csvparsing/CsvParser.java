@@ -14,7 +14,6 @@ import java.util.List;
 
 public class CsvParser {
 
-
     private final Charset charset;
 
     public CsvParser(Charset charset) {
@@ -24,7 +23,6 @@ public class CsvParser {
     public CsvParser() {
         this(StandardCharsets.UTF_8);
     }
-
 
 
     public List<Stop> parseStop(Path path) throws IOException, CsvValidationException {
@@ -53,38 +51,40 @@ public class CsvParser {
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
-                int route_id = Integer.parseInt(data[0]);
-                String route_name = data[1];
-                String route_type = data[4];
-                result.add(new Routes(route_id, route_name, route_type));
+                int routeId = Integer.parseInt(data[0]);
+                String routeName = data[1];
+                String routeType = data[4];
+                result.add(new Routes(routeId, routeName, routeType));
             }
         }
         return result;
     }
+
     public List<Trips> parseTrips(Path path) throws IOException, CsvValidationException {
         final List<Trips> result = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
-                int route_id = Integer.parseInt(data[0]);
-                int trip_id = Integer.parseInt(data[2]);
-                result.add(new Trips(route_id, trip_id));
+                int routeId = Integer.parseInt(data[0]);
+                int tripId = Integer.parseInt(data[2]);
+                result.add(new Trips(routeId, tripId));
             }
         }
         return result;
     }
+
     public List<StopTimes> parseStopTimes(Path path) throws IOException, CsvValidationException {
         final List<StopTimes> result = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
-                int trip_id = Integer.parseInt(data[0]);
-                String arrival= data[1];//should be int
-                String departure= data[2];// should be int
-                int stop_id=Integer.parseInt(data[3]);
-                int stop_sequence=Integer.parseInt(data[4]);
+                int tripId = Integer.parseInt(data[0]);
+                String arrival = data[1];//should be int
+                String departure = data[2];// should be int
+                int stopId = Integer.parseInt(data[3]);
+                int stopSequence = Integer.parseInt(data[4]);
 
-                result.add(new StopTimes(trip_id, arrival, departure,stop_id, stop_sequence ));
+                result.add(new StopTimes(tripId, arrival, departure, stopId, stopSequence));
             }
         }
         return result;

@@ -26,7 +26,7 @@ public class CreatingCsvMapping {
         final List<Routes> routes = parser.parseRoutes(routesPath);
         final Map<Integer, String> routesById = new HashMap<Integer, String>();
         for (Routes routes1 : routes) {
-            routesById.put(routes1.getRoute_id(), routes1.getRoute_type());
+            routesById.put(routes1.getId(), routes1.getType());
         }//map for type
 
 
@@ -34,7 +34,7 @@ public class CreatingCsvMapping {
         final List<Trips> trips = parser.parseTrips(tripsPath);
         final Map<Integer, Integer> tripsById = new HashMap<Integer, Integer>();
         for (Trips trips1 : trips) {
-            tripsById.put(trips1.getTrip_id(), trips1.getRoute_id());
+            tripsById.put(trips1.getTripId(), trips1.getRouteId());
         }//map for type
 
 
@@ -42,23 +42,23 @@ public class CreatingCsvMapping {
         final List<StopTimes> stop_times = parser.parseStopTimes(stop_timesPath);
         final Map<Integer, Integer> stop_sequenceById = new HashMap<Integer, Integer>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_sequenceById.put(stop_times1.getStop_id(), stop_times1.getStop_sequence() );
+            stop_sequenceById.put(stop_times1.getStopId(), stop_times1.getStopSequence() );
         } // map for sequences
 
 
         final Map<Integer, String> stop_arrivalById = new HashMap<Integer, String>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_arrivalById.put(stop_times1.getStop_id(), stop_times1.getArrival());
+            stop_arrivalById.put(stop_times1.getStopId(), stop_times1.getArrival());
         }//map for arrival time
 
         final Map<Integer, String> stop_departureById = new HashMap<Integer, String>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_departureById.put(stop_times1.getStop_id(), stop_times1.getDeparture());
+            stop_departureById.put(stop_times1.getStopId(), stop_times1.getDeparture());
         }//map for departure time
 
         final Map<Integer, Integer> stop_typeById = new HashMap<Integer, Integer>();
         for (StopTimes stop_times1 : stop_times) {
-            stop_typeById.put(stop_times1.getStop_id(), stop_times1.getTrip_id() );
+            stop_typeById.put(stop_times1.getStopId(), stop_times1.getTripId() );
         } // map for type
 
     }
