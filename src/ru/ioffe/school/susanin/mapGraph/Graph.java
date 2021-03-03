@@ -12,10 +12,7 @@ public class Graph {
 
             for (edge: edges){
                Vertex from = Edge.getFrom() ;
-               graph.add() = Edge.getTo()
+               graph.add() = Edge.getTo();
             }
-
-
-
     }
 }
