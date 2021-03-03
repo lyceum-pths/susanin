@@ -14,7 +14,6 @@ public class Point implements Serializable {
     private final double lat;
     private final double lon;
 
-
     /**
      * Constructs Point with id and coordinates
      *
