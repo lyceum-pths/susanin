@@ -54,6 +54,7 @@ public class Point implements Serializable {
         return lon;
     }
 
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Point)) {
