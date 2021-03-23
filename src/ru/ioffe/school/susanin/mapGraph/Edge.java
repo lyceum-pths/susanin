@@ -3,53 +3,19 @@ package ru.ioffe.school.susanin.mapGraph;
 /**
  * Represents a graph edge
  */
-public class Edge {
+interface Edge {
 
-    private final Vertex from;
-    private final Vertex to;
-    private final int time;
-    private final int cost;
-    private final boolean isScheduled;
+    default  int time;
 
     /**
-     * Constructs Edge with specific cost and
-     * time required to go through it.
+     * Constructs Edge with specific time required to go through it.
      *
-     * @param from        edge start
-     * @param to          edge end
-     * @param time        time in minutes required to go through edge
-     * @param cost        edge cost
-     * @param isScheduled true if transport has schedule, false otherwise
+     * @param time in minutes required to go through edge
      */
-    public Edge(Vertex from, Vertex to, int time, int cost, boolean isScheduled) {
-        this.from = from;
-        this.to = to;
-        if (isScheduled) {
-            this.time = -1;
-        } else {
-            this.time = time;
-        }
-        this.cost = cost;
-        this.isScheduled = isScheduled;
-    }
 
-    public Vertex getFrom() {
-        return from;
-    }
+    default Edge(int time) { this.time = time;}
 
-    public Vertex getTo() {
-        return to;
-    }
-
-    public int getCost() {
-        return cost;
-    }
-
-    public int getTime() {
+    default int getTime() {
         return time;
-    }
-
-    public boolean isScheduled() {
-        return isScheduled;
     }
 }
