@@ -142,6 +142,15 @@ public class Road implements Serializable {
     }
 
     /**
+     * Returns whether the road is oneway or not.
+     *
+     * @return true if road has a direction (from-&gt;to), false otherwise
+     */
+    public boolean isOneway() {
+        return isOneway;
+    }
+
+    /**
      * Returns a {@link java.util.HashMap} of transport which can be used to
      * move through this road.
      *

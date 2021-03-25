@@ -5,8 +5,8 @@ package ru.ioffe.school.susanin.mapGraph;
  */
 interface Edge {
 
-
-
-    default void getTime() {
-    }
+    int getTime();
+    int getCost();
+    Vertex getFrom();
+    Vertex getTo();
 }
