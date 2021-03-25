@@ -37,4 +37,9 @@ public class BusEdge {
     public boolean isScheduled() {
         return isScheduled;
     }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
