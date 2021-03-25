@@ -1,25 +1,22 @@
 package ru.ioffe.school.susanin.mapGraph;
 
-public class BusEdge {
+public class TransportEdge {
     private final Vertex from;
     private final Vertex to;
     private final int cost;
-    private final boolean isScheduled;
 
     /**
      * Constructs Edge with specific cost and
      * time required to go through it.
      *
-     * @param from        edge start
-     * @param to          edge end
-     * @param cost        edge cost
-     * @param isScheduled true if transport has schedule, false otherwise
+     * @param from edge start
+     * @param to   edge end
+     * @param cost edge cost
      */
-    public BusEdge(Vertex from, Vertex to, int cost, boolean isScheduled) {
+    public TransportEdge(Vertex from, Vertex to, int cost) {
         this.from = from;
         this.to = to;
         this.cost = cost;
-        this.isScheduled = isScheduled;
     }
 
     public Vertex getFrom() {
@@ -34,7 +31,7 @@ public class BusEdge {
         return cost;
     }
 
-    public boolean isScheduled() {
-        return isScheduled;
+    public int getTime() {
+        return 3; //some magic time
     }
 }
