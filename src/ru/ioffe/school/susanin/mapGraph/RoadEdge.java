@@ -7,7 +7,8 @@ public class RoadEdge {
     private final int cost;
 
     /**
-     * Constructs RoadEdge with specific cost required to go through it.
+     * Constructs RoadEdge with specific cost and
+     * time required to go through it.
      *
      * @param from edge start
      * @param to   edge end
@@ -35,5 +36,10 @@ public class RoadEdge {
 
     public double getTime() {
         return time;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
