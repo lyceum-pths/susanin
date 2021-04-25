@@ -37,9 +37,5 @@ public class RoadEdge {
     public double getTime() {
         return time;
     }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+    
 }
