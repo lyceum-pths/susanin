@@ -34,8 +34,7 @@ public class RoadEdge {
         return cost;
     }
 
-    public double getTime() {
+    public double getTime(double currentTime) {
         return time;
     }
-    
 }

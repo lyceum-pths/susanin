@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class MapGraph {
     // private ArrayList<HashMap<Vertex, ArrayList<Edge>>> graph;
-    private HashMap<Vertex, ArrayList<RoadEdge>> graph;
+    private HashMap<Vertex, ArrayList<Edge>> graph;
     private ArrayList<Vertex> vertices;
     private ArrayList<RoadEdge> edges;
 
@@ -42,43 +42,6 @@ public class MapGraph {
                 */
             }
         }
-    }
-
-    public double FindRoute(Point start, Point end /*, int maxCost */) {
-        final int INFINITY = 1000;
-        double[] times = new double[vertices.size()];
-        Arrays.fill(times, INFINITY);
-        boolean[] visited = new boolean[vertices.size()];
-        Arrays.fill(visited, false);
-        Vertex from = vertices.get(0), to = vertices.get(0);
-        for (Vertex vertex : vertices) {
-            if (vertex.getRef().equals(start)) {
-                from = vertex;
-            } else if (vertex.getRef().equals(end)) {
-                to = vertex;
-            }
-        }
-        times[vertices.indexOf(from)] = 0.0;
-        for (int i = 0; i < vertices.size(); i++) {
-            int current = -1;
-            for (int j = 0; j < vertices.size(); j++) {
-                if (!visited[j] && (current == -1 || times[j] < times[current])) {
-                    current = j;
-                }
-            }
-            if (times[current] == INFINITY) {
-                break;
-            }
-            visited[current] = true;
-            for (RoadEdge edge : graph.get(vertices.get(current))) {
-                Vertex dest = edge.getTo();
-                double time = edge.getTime();
-                if (times[current] + time < times[dest.getId()]) {
-                    times[dest.getId()] = times[current] + time;
-                }
-            }
-        }
-        return times[to.getId()];
     }
 
     /**

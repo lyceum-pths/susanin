@@ -31,7 +31,7 @@ public class TransportEdge {
         return cost;
     }
 
-    public int getTime() {
-        return 3; //some magic time
+    public double getTime(double currentTime) {
+        return 3.0; //some magic time
     }
 }
