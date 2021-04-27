@@ -1,7 +1,9 @@
 package ru.ioffe.school.susanin.utils;
 
+import ru.ioffe.school.susanin.data.Point;
 import ru.ioffe.school.susanin.data.Road;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -22,9 +24,31 @@ public class MapUtils {
      * @param toLon segment end longitude
      * @return length of road segment
      */
-    public static double calcLength(double fromLat, double fromLon, double toLat, double toLon) {
+    public static double calculateLength(double fromLat, double fromLon, double toLat, double toLon) {
         return Math.sqrt((toLat - fromLat) * (toLat - fromLat) * metersInLatDegree * metersInLatDegree +
                 (toLon - fromLon) * (toLon - fromLon) * metersInLonDegree * metersInLonDegree);
+    }
+
+    /**
+     * Finds closest point on a map
+     * to a current point.
+     *
+     * @param lat current point latitude
+     * @param lon current point longitude
+     * @param points map points list
+     * @return closest point
+     */
+    public static Point getClosestPoint(double lat, double lon, ArrayList<Point> points) {
+        double minDist = 0.0;
+        Point closest = points.get(0);
+        for (Point point : points) {
+            double dist = calculateLength(lat, lon, point.getLat(), point.getLon());
+            if (dist <= minDist) {
+                minDist = dist;
+                closest = point;
+            }
+        }
+        return closest;
     }
 
     /**

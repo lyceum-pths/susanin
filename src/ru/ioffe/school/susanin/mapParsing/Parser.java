@@ -240,7 +240,7 @@ public class Parser {
                     prevLon = curLon;
                     curLat = Double.parseDouble(point.getAttribute("lat"));
                     curLon = Double.parseDouble(point.getAttribute("lon"));
-                    length += MapUtils.calcLength(prevLat, prevLon, curLat, curLon);
+                    length += MapUtils.calculateLength(prevLat, prevLon, curLat, curLon);
                     to = Long.parseLong(pointId);
                     if (pointsCollection.get(to) != null) {
                         if (usedRoads.get(roadId) != null) {
