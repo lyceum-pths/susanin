@@ -1,23 +1,29 @@
 package ru.ioffe.school.susanin.data;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Route {
 
     private final int id;
     private final String name;
     private final String transportMean;
-    private final ArrayList<Stop> stops;
+    private final HashSet<Stop> clockwise;
+    private final HashSet<Stop> counterClockwise;
 
     public Route(int id, String name, String transportMean) {
         this.id = id;
         this.name = name;
         this.transportMean = transportMean;
-        this.stops = new ArrayList<>();
+        this.clockwise = new HashSet<>();
+        this.counterClockwise = new HashSet<>();
     }
 
-    public void setStops(ArrayList<Stop> stops) {
-        this.stops.addAll(stops);
+    public void setClockwise(HashSet<Stop> stops) {
+        this.clockwise.addAll(stops);
+    }
+
+    public void setCounterClockwise(HashSet<Stop> stops) {
+        this.counterClockwise.addAll(stops);
     }
 
     public int getId() {
@@ -32,8 +38,8 @@ public class Route {
         return transportMean;
     }
 
-    public ArrayList<Stop> getStops() {
-        return stops;
+    public HashSet<Stop> getCounterClockwise() {
+        return counterClockwise;
     }
 
     @Override

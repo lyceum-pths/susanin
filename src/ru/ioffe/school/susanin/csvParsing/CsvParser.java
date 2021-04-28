@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CsvParser {
 
@@ -67,17 +64,18 @@ public class CsvParser {
             for (String[] data : reader) {
                 int routeId = Integer.parseInt(data[0]);
                 int tripId = Integer.parseInt(data[2]);
+                int direction = Integer.parseInt(data[3]);
 
-                result.add(new Trip(routeId, tripId));
+                result.add(new Trip(routeId, tripId, direction));
             }
         }
         return result;
     }
 
-    public HashMap<Long, ArrayList<Stop>> parseStopTimes(
+    public HashMap<Integer, ArrayList<Long>> parseStopTimes(
             Path path, Map<Long, Stop> stopsById, Map<Integer, Trip> tripsById)
             throws IOException, CsvValidationException {
-        final HashMap<Integer, ArrayList<Stop>> result = new HashMap<>();
+        final HashMap<Integer, ArrayList<Long>> result = new HashMap<>();
         try (CSVReader reader = new CSVReader(new FileReader(path.toFile(), charset))) {
             reader.readNext();
             for (String[] data : reader) {
@@ -88,7 +86,9 @@ public class CsvParser {
 
                 stopsById.get(stopId).addStopTime(time);
                 if (!result.containsKey(tripId)) {
-                    result.put(tripId, )
+                    result.put(tripId, new ArrayList<Long>(Arrays.asList(stopId)));
+                } else {
+                    result.get(tripId).add(stopId);
                 }
             }
         }

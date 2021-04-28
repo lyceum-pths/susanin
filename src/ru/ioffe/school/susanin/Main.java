@@ -1,6 +1,8 @@
 package ru.ioffe.school.susanin;
 
+import com.opencsv.exceptions.CsvValidationException;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import ru.ioffe.school.susanin.csvParsing.CsvMapper;
 import ru.ioffe.school.susanin.data.Point;
 import ru.ioffe.school.susanin.data.Road;
 import ru.ioffe.school.susanin.debug.MapDrawer;
@@ -9,6 +11,7 @@ import ru.ioffe.school.susanin.mapParsing.Parser;
 
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,7 +33,7 @@ public class Main {
      *
      * @param args command line arguments
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException, CsvValidationException {
 
         Scanner in = new Scanner(System.in);
         System.out.println("Need to parse new file?\ntype \"y\" for yes\n" +
@@ -59,6 +62,9 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
+        CsvMapper csvMapper = new CsvMapper();
+        CsvMapper.createMapping();
 
         MapDrawer fullMap = new MapDrawer(2048, 1536, 59.6254, 60.1613,
                 29.6068, 30.7343, false);
