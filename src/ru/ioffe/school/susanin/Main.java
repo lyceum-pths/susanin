@@ -8,6 +8,8 @@ import ru.ioffe.school.susanin.mapParsing.POIParser;
 import ru.ioffe.school.susanin.mapParsing.Parser;
 
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -34,6 +36,8 @@ public class Main {
         System.out.println("Need to parse new file?\ntype \"y\" for yes\n" +
                 "!!! Spb is parsed. Don't parse again !!!");
         String choice = in.nextLine();
+        HashMap<Long, Point> points = new HashMap<>();
+        HashSet<Road> roads = new HashSet<>();
         if (choice.equals("y")) {
             try {
                 HashSet<String> POI = new HashSet<>();
@@ -43,54 +47,12 @@ public class Main {
                 poiParser.parse(pois);
                 POI.addAll(poiParser.getPOI());
 
-                // Getting first set of POIs
-                /*
-                Path poiWest = Paths.get(MAP_RESOURCES_DIR + "preparse1.xml");
-                POIParser poiParserWest = new POIParser();
-                poiParserWest.parse(poiWest);
-                POI.addAll(poiParserWest.getPOI());
-                 */
-
-                // Getting second set of POIs
-                /*
-                Path poiEast = Paths.get(MAP_RESOURCES_DIR + "preparse2.xml");
-                POIParser poiParserEast = new POIParser();
-                poiParserEast.parse(poiEast);
-                POI.addAll(poiParserEast.getPOI());
-                 */
-
-                //poiParserWest = null;
-                //poiParserEast = null;
-                poiParser = null;
-
-                HashMap<Long, Point> points = new HashMap<>();
-                HashSet<Road> roads = new HashSet<>();
-
                 Path city = Paths.get(MAP_RESOURCES_DIR + "final.xml");
                 Parser cityParser = new Parser();
                 cityParser.parse(city, POI);
                 points.putAll(cityParser.getPointsCollection());
                 roads.addAll(cityParser.getRoadsCollection());
 
-                // Parsing first part of map and getting points and roads
-                /*
-                Path westPart = Paths.get(MAP_RESOURCES_DIR + "part1.xml");
-                Parser parserWest = new Parser();
-                parserWest.parse(westPart, POI);
-                points.putAll(parserWest.getPointsCollection());
-                roads.addAll(parserWest.getRoadsCollection());
-                 */
-
-                // Parsing second part of map and getting points and roads
-                /*
-                Path eastPart = Paths.get(MAP_RESOURCES_DIR + "part2.xml");
-                Parser parserEast = new Parser();
-                parserEast.parse(eastPart, POI);
-                points.putAll(parserEast.getPointsCollection());
-                roads.addAll(parserEast.getRoadsCollection());
-                 */
-
-                // Saving point and roads to a file
                 Path data = Paths.get("data\\map.data");
                 Parser.saveData(points, roads, data);
             } catch (Exception e) {
@@ -98,11 +60,19 @@ public class Main {
             }
         }
 
-        MapDrawer mapDrawer = new MapDrawer(2048, 1536, 59.6254, 60.1613,
+        MapDrawer fullMap = new MapDrawer(2048, 1536, 59.6254, 60.1613,
                 29.6068, 30.7343, false);
+        MapDrawer center = new MapDrawer(4096, 3072, 59.9034, 59.9617,
+                30.2392, 30.4187, false);
         try {
-            mapDrawer.drawImage(Paths.get("data\\map.data"));
-            mapDrawer.saveImage("spb");
+            FileInputStream fis = new FileInputStream(Paths.get("data\\map.data").toFile());
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            points = (HashMap<Long, Point>) ois.readObject();
+            roads = (HashSet<Road>) ois.readObject();
+            fullMap.drawImage(points, roads);
+            fullMap.saveImage("spb_full");
+            center.drawImage(points, roads);
+            center.saveImage("spb_center");
         } catch (Exception e) {
             e.printStackTrace();
         }

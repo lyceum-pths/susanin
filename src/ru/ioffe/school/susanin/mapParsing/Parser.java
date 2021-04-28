@@ -1,5 +1,6 @@
 package ru.ioffe.school.susanin.mapParsing;
 
+import com.sun.jdi.connect.Transport;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 import ru.ioffe.school.susanin.data.*;
@@ -29,6 +30,17 @@ public class Parser {
             "service", "living_street", "footway", "pedestrian", "path", "steps", "track");
     private static final List<String> pedestrianTypes = Arrays.asList(
             "service", "footway", "pedestrian", "path", "steps", "track");
+    private static final List<String> multiAccessTypes = Arrays.asList(
+            "service", "track");
+
+    private static final List<String> hugeRoads = Arrays.asList(
+            "motorway", "trunk", "primary", "motorway_link", "trunk_link", "primary_link");
+    private static final List<String> bigRoads = Arrays.asList(
+            "tertiary", "unclassified", "tertiary_link");
+    private static final List<String> middleRoads = Arrays.asList(
+            "residential", "track", "service", "living_street");
+    private static final List<String> smallRoads = Arrays.asList(
+            "footway", "pedestrian", "path", "steps");
 
     private enum ObjectToParse {
 
@@ -40,6 +52,22 @@ public class Parser {
     private final HashMap<String, Integer> speedLimits;
     private final HashMap<Long, Point> pointsCollection;
     private final HashSet<Road> roadsCollection;
+
+    private static class RoadState {
+
+        boolean isRoad;
+        boolean isOneway;
+        HashMap<String, String> transportMeans;
+        int speed;
+
+        RoadState(boolean isRoad, boolean isOneway,
+                  HashMap<String, String> transportMeans, int speed) {
+            this.isRoad = isRoad;
+            this.isOneway = isOneway;
+            this.transportMeans = new HashMap<>(transportMeans);
+            this.speed = speed;
+        }
+    }
 
     /**
      * Constructs a Parser with specific road speed parameters.
@@ -149,11 +177,11 @@ public class Parser {
         }
     }
 
-    private List<String> parseRoad(Element road) {
+    private RoadState parseRoad(Element road) {
         boolean isRoad = false;
         boolean isOneway = false;
-        boolean isPedestrian = false;
         int speed = speedLimits.get("pedestrian");
+        HashMap<String, String> transportMeans = new HashMap<>();
         NodeList properties = road.getElementsByTagName("tag");
         for (int j = 0; j < properties.getLength(); j++) {
             Element property = (Element) properties.item(j);
@@ -162,8 +190,13 @@ public class Parser {
             if (key.equals("highway")) {
                 if (roadTypes.contains(value)) {
                     isRoad = true;
-                    if (pedestrianTypes.contains(value)) {
-                        isPedestrian = true;
+                    if (multiAccessTypes.contains(value)) {
+                        transportMeans.put("foot", "foot");
+                        transportMeans.put("car", "car");
+                    } else if (pedestrianTypes.contains(value)) {
+                        transportMeans.put("foot", "foot");
+                    } else if (roadTypes.contains(value)) {
+                        transportMeans.put("car", "car");
                     }
                     for (j = 0; j < properties.getLength(); j++) {
                         property = (Element) properties.item(j);
@@ -188,6 +221,7 @@ public class Parser {
                 }
             } else if (key.equals("railway")) {
                 // That's because subway data in .osm is incorrect
+                //transportMeans.put("train", "train");
                 if (value.equals("subway")) {
                     break;
                 }
@@ -203,26 +237,28 @@ public class Parser {
                 }
             }
         }
-        return List.of(Boolean.toString(isRoad), Boolean.toString(isOneway),
-                Boolean.toString(isPedestrian), Integer.toString(speed));
+        return new RoadState(isRoad, isOneway, transportMeans, speed);
     }
 
     private void parseRoads(Document doc, HashMap<Long, HashMap<String, String>> usedRoads) {
-        boolean isRoad, isPedestrian, isOneway;
+        boolean isRoad, isOneway;
         double length;
         long roadId, from, to;
         int speed;
-        List<String> roadParams;
+        RoadState roadState;
         NodeList roads = doc.getElementsByTagName("way");
         int roadsLength = roads.getLength();
         for (int i = 0; i < roadsLength; i++) {
             Element road = (Element) roads.item(i);
-            roadParams = parseRoad(road);
-            isRoad = Boolean.parseBoolean(roadParams.get(0));
-            isOneway = Boolean.parseBoolean(roadParams.get(1));
-            isPedestrian = Boolean.parseBoolean(roadParams.get(2));
-            speed = Integer.parseInt(roadParams.get(3));
             roadId = Long.parseLong(road.getAttribute("id"));
+            if (roadId == 96700760) {
+                System.out.println("stop");
+            }
+            roadState = parseRoad(road);
+            isRoad = roadState.isRoad;
+            isOneway = roadState.isOneway;
+            HashMap<String, String> transportMeans = new HashMap<>(roadState.transportMeans);
+            speed = roadState.speed;
             length = 0.0;
             if (isRoad) {
                 NodeList refs = road.getElementsByTagName("nd");
@@ -246,7 +282,7 @@ public class Parser {
                         if (usedRoads.get(roadId) != null) {
                             roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, usedRoads.get(roadId)));
                         } else {
-                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, isPedestrian));
+                            roadsCollection.add(new Road(roadId, length, speed, from, to, isOneway, transportMeans));
                         }
                         from = to;
                         length = 0.0;
@@ -300,8 +336,8 @@ public class Parser {
     /**
      * Saves parsed data to file.
      *
-     * @param points points to save
-     * @param roads roads to save
+     * @param points   points to save
+     * @param roads    roads to save
      * @param dataPath path to file to save data in
      * @throws IOException
      */

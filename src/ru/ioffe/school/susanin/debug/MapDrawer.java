@@ -57,19 +57,11 @@ public class MapDrawer {
     /**
      * Draws a specific map part image.
      *
-     * @param mapPath path to file with map data
      * @throws IOException
-     * @throws ClassNotFoundException
      */
-    public void drawImage(Path mapPath) throws IOException, ClassNotFoundException {
+    public void drawImage(HashMap<Long, Point> points, HashSet<Road> roads) throws IOException {
         double latFactor = mapImage.getHeight() / (maxLat - minLat);
         double lonFactor = mapImage.getWidth() / (maxLon - minLon);
-        HashMap<Long, Point> points;
-        HashSet<Road> roads;
-        FileInputStream fis = new FileInputStream(mapPath.toFile());
-        ObjectInputStream ois = new ObjectInputStream(fis);
-        points = (HashMap<Long, Point>) ois.readObject();
-        roads = (HashSet<Road>) ois.readObject();
         for (Road road : roads) {
             Point from = points.get(road.getFrom());
             Point to = points.get(road.getTo());
@@ -78,7 +70,8 @@ public class MapDrawer {
             double toX = (to.getLon() - minLon) * lonFactor;
             double toY = Math.abs((to.getLat() - minLat) * latFactor - mapImage.getHeight());
             if (checkBounds(from.getLon(), from.getLat(), to.getLon(), to.getLat())) {
-                if (road.getTransportMeans().equals(Map.of("foot", "foot"))) {
+                if (road.getTransportMeans().containsValue("foot") &&
+                        road.getTransportMeans().containsValue("car")) {
                     content.setColor(Color.PINK);
                 } else if (road.getTransportMeans().containsValue("subway")) {
                     content.setColor(Color.CYAN);
@@ -86,6 +79,8 @@ public class MapDrawer {
                     content.setColor(Color.WHITE);
                 } else if (road.getTransportMeans().containsValue("tram")) {
                     content.setColor(Color.RED);
+                } else if (road.getTransportMeans().containsValue("foot")) {
+                    content.setColor(Color.LIGHT_GRAY);
                 } else {
                     content.setColor(Color.YELLOW);
                 }

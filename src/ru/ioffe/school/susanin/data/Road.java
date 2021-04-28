@@ -11,7 +11,15 @@ import java.util.Objects;
 public class Road implements Serializable {
 
     private static final long serialVersionUID = 7821348647156236852L;
-    private static final long DEFAULT_ROAD_ID = 1L;
+    private static final long DEFAULT_ROAD_ID = -1L;
+
+    private enum SizeType {
+
+        HUGE,
+        BIG,
+        MIDDLE,
+        SMALL
+    }
 
     private final long id;
     private final double length;
@@ -19,7 +27,8 @@ public class Road implements Serializable {
     private final long to;
     private final int speedLimit;
     private final boolean isOneway;
-    //the key is a route name or number, value is the type of transport
+    private final SizeType size;
+    // the key is a route name or number, value is the type of transport
     private final HashMap<String, String> transportMeans;
 
     /**
@@ -35,13 +44,7 @@ public class Road implements Serializable {
      */
     public Road(double length, int speedLimit, long from, long to,
                 boolean isOneway, HashMap<String, String> transportMeans) {
-        this.id = DEFAULT_ROAD_ID;
-        this.length = length;
-        this.speedLimit = speedLimit;
-        this.from = from;
-        this.to = to;
-        this.isOneway = isOneway;
-        this.transportMeans = new HashMap<>(transportMeans);
+         this(DEFAULT_ROAD_ID, length, speedLimit, from, to, isOneway, transportMeans);
     }
 
     /**
@@ -64,34 +67,9 @@ public class Road implements Serializable {
         this.from = from;
         this.to = to;
         this.isOneway = isOneway;
+        this.size = SizeType.MIDDLE;
         this.transportMeans = new HashMap<>(transportMeans);
-        this.transportMeans.put("car", "car");
-    }
-
-    /**
-     * Constructs Road which is not contained
-     * in public transport routes.
-     *
-     * @param id road id
-     * @param length road length
-     * @param speedLimit road speed restriction
-     * @param from id of road start point
-     * @param to id of road end point
-     * @param isOneway true if road has a direction (from-&gt;to), false otherwise
-     * @param isPedestrian true if people can move through, false otherwise
-     */
-    public Road(long id, double length, int speedLimit, long from, long to,
-                boolean isOneway, boolean isPedestrian) {
-        this.id = id;
-        this.length = length;
-        this.speedLimit = speedLimit;
-        this.from = from;
-        this.to = to;
-        this.isOneway = isOneway;
-        this.transportMeans = new HashMap<>();
-        if (isPedestrian) {
-            this.transportMeans.put("foot", "foot");
-        } else {
+        if (!transportMeans.containsValue("foot")) {
             this.transportMeans.put("car", "car");
         }
     }
@@ -148,6 +126,15 @@ public class Road implements Serializable {
      */
     public boolean isOneway() {
         return isOneway;
+    }
+
+    /**
+     * Returns road size in 4-type scale.
+     *
+     * @return name of the size in lower case
+     */
+    public String getSize() {
+        return size.name().toLowerCase();
     }
 
     /**

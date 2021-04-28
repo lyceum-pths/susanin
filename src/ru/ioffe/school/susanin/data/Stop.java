@@ -1,5 +1,7 @@
 package ru.ioffe.school.susanin.data;
 
+import java.util.ArrayList;
+
 /**
  * Represents a public transport stop.
  */
@@ -9,7 +11,8 @@ public class Stop extends Point {
 
     private final String name;
     private final int code;
-    private final String type;
+    private final String transportMean;
+    private final ArrayList<String> stopTimes;
 
     /**
      * Constructs Stop with specific parameters.
@@ -23,14 +26,20 @@ public class Stop extends Point {
         super(id, lat, lon);
         this.name = name;
         this.code = 0;
-        this.type = "0";
+        this.transportMean = "0";
+        this.stopTimes = new ArrayList<>();
     }
 
-    public Stop(long id, int code, String name, double lat, double lon, String type) {
+    public Stop(long id, int code, String name, double lat, double lon, String transportMean) {
         super(id, lat, lon);
         this.code = code;
         this.name = name;
-        this.type = type;
+        this.transportMean = transportMean;
+        this.stopTimes = new ArrayList<>();
+    }
+
+    public void addStopTime(String stopTime) {
+        this.stopTimes.add(stopTime);
     }
 
     public String getName() {
@@ -41,8 +50,12 @@ public class Stop extends Point {
         return code;
     }
 
-    public String getType() {
-        return type;
+    public String getTransportMean() {
+        return transportMean;
+    }
+
+    public ArrayList<String> getStopTimes() {
+        return stopTimes;
     }
 
     @Override
@@ -50,7 +63,7 @@ public class Stop extends Point {
         return "Stops{" + System.lineSeparator() +
                 "\tstop_code='" + code + '\'' + System.lineSeparator() +
                 "\tstop_name='" + name + '\'' + System.lineSeparator() +
-                "\ttransport_type='" + type + '\'' + System.lineSeparator() +
+                "\ttransport_type='" + transportMean + '\'' + System.lineSeparator() +
                 '}';
 
     }
