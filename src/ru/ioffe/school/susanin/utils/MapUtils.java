@@ -39,7 +39,7 @@ public class MapUtils {
      * @return closest point
      */
     public static Point getClosestPoint(double lat, double lon, ArrayList<Point> points) {
-        double minDist = 0.0;
+        double minDist = 10000000.0;
         Point closest = points.get(0);
         for (Point point : points) {
             double dist = calculateLength(lat, lon, point.getLat(), point.getLon());
