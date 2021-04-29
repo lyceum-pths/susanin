@@ -1,28 +1,31 @@
 package ru.ioffe.school.susanin.data;
 
-import java.util.HashSet;
+import java.io.Serializable;
+import java.util.LinkedHashSet;
 
-public class Route {
+public class Route implements Serializable {
+
+    private static final long serialVersionUID = 1606460755096526779L;
 
     private final int id;
     private final String name;
     private final String transportMean;
-    private final HashSet<Stop> clockwise;
-    private final HashSet<Stop> counterClockwise;
+    private final LinkedHashSet<Stop> clockwise;
+    private final LinkedHashSet<Stop> counterClockwise;
 
     public Route(int id, String name, String transportMean) {
         this.id = id;
         this.name = name;
         this.transportMean = transportMean;
-        this.clockwise = new HashSet<>();
-        this.counterClockwise = new HashSet<>();
+        this.clockwise = new LinkedHashSet<>();
+        this.counterClockwise = new LinkedHashSet<>();
     }
 
-    public void setClockwise(HashSet<Stop> stops) {
+    public void setClockwise(LinkedHashSet<Stop> stops) {
         this.clockwise.addAll(stops);
     }
 
-    public void setCounterClockwise(HashSet<Stop> stops) {
+    public void setCounterClockwise(LinkedHashSet<Stop> stops) {
         this.counterClockwise.addAll(stops);
     }
 
@@ -38,7 +41,11 @@ public class Route {
         return transportMean;
     }
 
-    public HashSet<Stop> getCounterClockwise() {
+    public LinkedHashSet<Stop> getClockwise() {
+        return clockwise;
+    }
+
+    public LinkedHashSet<Stop> getCounterClockwise() {
         return counterClockwise;
     }
 

@@ -2,9 +2,11 @@ package ru.ioffe.school.susanin.debug;
 
 import ru.ioffe.school.susanin.data.Road;
 import ru.ioffe.school.susanin.data.Point;
+import ru.ioffe.school.susanin.data.Stop;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -59,7 +61,8 @@ public class MapDrawer {
      *
      * @throws IOException
      */
-    public void drawImage(HashMap<Long, Point> points, HashSet<Road> roads) throws IOException {
+    public void drawImage(HashMap<Long, Point> points, HashSet<Road> roads,
+                          HashMap<Long, Stop> stops) throws IOException {
         double latFactor = mapImage.getHeight() / (maxLat - minLat);
         double lonFactor = mapImage.getWidth() / (maxLon - minLon);
         for (Road road : roads) {
@@ -77,14 +80,20 @@ public class MapDrawer {
                     content.setColor(Color.CYAN);
                 } else if (road.getTransportMeans().containsValue("train")) {
                     content.setColor(Color.WHITE);
-                } else if (road.getTransportMeans().containsValue("tram")) {
-                    content.setColor(Color.RED);
                 } else if (road.getTransportMeans().containsValue("foot")) {
                     content.setColor(Color.LIGHT_GRAY);
                 } else {
                     content.setColor(Color.YELLOW);
                 }
                 content.draw(new Line2D.Double(fromX, fromY, toX, toY));
+            }
+        }
+        for (Stop stop : stops.values()) {
+            double x = (stop.getLon() - minLon) * lonFactor;
+            double y = Math.abs((stop.getLat() - minLat) * latFactor - mapImage.getHeight());
+            if (checkBounds(stop.getLon(), stop.getLat(), stop.getLon(), stop.getLat())) {
+                content.setColor(Color.CYAN);
+                content.draw(new Ellipse2D.Double(x, y, 4, 4));
             }
         }
     }

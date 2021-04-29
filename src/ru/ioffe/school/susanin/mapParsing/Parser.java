@@ -164,10 +164,8 @@ public class Parser {
                 }
                 switch (objectToParse) {
                     case POINT:
-                        pointsCollection.put(id, new Point(id, lat, lon));
-                        break;
                     case STOP:
-                        pointsCollection.put(id, new Stop(id, lat, lon, name));
+                        pointsCollection.put(id, new Point(id, lat, lon));
                         break;
                     case HOUSE:
                         pointsCollection.put(id, new House(id, lat, lon, number, street, name));
@@ -331,25 +329,6 @@ public class Parser {
             }
         }
         parseRoads(doc, usedRoads);
-    }
-
-    /**
-     * Saves parsed data to file.
-     *
-     * @param points   points to save
-     * @param roads    roads to save
-     * @param dataPath path to file to save data in
-     * @throws IOException
-     */
-    public static void saveData(HashMap<Long, Point> points, HashSet<Road> roads,
-                                Path dataPath) throws IOException {
-        try (
-                FileOutputStream fos = new FileOutputStream(dataPath.toFile());
-                ObjectOutputStream oos = new ObjectOutputStream(fos)
-        ) {
-            oos.writeObject(points);
-            oos.writeObject(roads);
-        }
     }
 
     /**

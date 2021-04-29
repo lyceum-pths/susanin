@@ -10,24 +10,28 @@ import java.util.*;
 
 public class CsvMapper {
 
+    private final HashMap<Long, Stop> stopsById;
+    private final ArrayList<Route> routes;
+
     public CsvMapper() {
+        this.stopsById = new HashMap<>();
+        this.routes = new ArrayList<>();
     }
 
-    public static void createMapping() throws IOException, CsvValidationException {
+    public void createMapping() throws IOException, CsvValidationException {
 
-        final String resourceFolder = "C:\\Users\\Eugene\\Research\\osm\\extra\\";
+        final String resourceFolder = "D:\\osm\\extra\\";
 
         final CsvParser parser = new CsvParser();
 
         final Path stopsPath = Paths.get(resourceFolder + "stops.txt");
         final List<Stop> stops = parser.parseStops(stopsPath);
-        final Map<Long, Stop> stopsById = new HashMap<>();
         for (Stop stop : stops) {
             stopsById.put(stop.getId(), stop);
         }
 
         final Path routesPath = Paths.get(resourceFolder + "routes.txt");
-        final List<Route> routes = parser.parseRoutes(routesPath);
+        routes.addAll(parser.parseRoutes(routesPath));
         final Map<Integer, Route> routesById = new HashMap<>();
         for (Route route : routes) {
             routesById.put(route.getId(), route);
@@ -46,7 +50,7 @@ public class CsvMapper {
 
         Set<Integer> keys = new HashSet<>(tripsAndTimes.keySet());
         for (int key : keys) {
-            HashSet<Stop> routeStops = new HashSet<>();
+            LinkedHashSet<Stop> routeStops = new LinkedHashSet<>();
             for (long stopId : tripsAndTimes.get(key)) {
                 routeStops.add(stopsById.get(stopId));
             }
@@ -56,5 +60,13 @@ public class CsvMapper {
                 routesById.get(tripsById.get(key).getRouteId()).setCounterClockwise(routeStops);
             }
         }
+    }
+
+    public ArrayList<Route> getRoutes() {
+        return routes;
+    }
+
+    public HashMap<Long, Stop> getStops() {
+        return stopsById;
     }
 }

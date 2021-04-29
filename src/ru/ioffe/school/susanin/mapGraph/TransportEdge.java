@@ -32,6 +32,6 @@ public class TransportEdge {
     }
 
     public double getTime(double currentTime) {
-        return 3.0; //some magic time
+        return 3.0 + ((int) currentTime) % 5; //some magic time
     }
 }

@@ -10,35 +10,27 @@ public class Stop extends Point {
     private static final long serialVersionUID = 5689390855290524579L;
 
     private final String name;
-    private final int code;
     private final String transportMean;
-    private final ArrayList<String> stopTimes;
+    // stop times in minutes from 00:00
+    private final ArrayList<Integer> stopTimes;
 
     /**
      * Constructs Stop with specific parameters.
      *
      * @param id   stop id
+     * @param name stop name
      * @param lat  stop latitude
      * @param lon  stop longitude
-     * @param name stop name
+     * @param transportMean type of transport which stops
      */
-    public Stop(long id, double lat, double lon, String name) {
+    public Stop(long id, String name, double lat, double lon, String transportMean) {
         super(id, lat, lon);
-        this.name = name;
-        this.code = 0;
-        this.transportMean = "0";
-        this.stopTimes = new ArrayList<>();
-    }
-
-    public Stop(long id, int code, String name, double lat, double lon, String transportMean) {
-        super(id, lat, lon);
-        this.code = code;
         this.name = name;
         this.transportMean = transportMean;
         this.stopTimes = new ArrayList<>();
     }
 
-    public void addStopTime(String stopTime) {
+    public void addStopTime(Integer stopTime) {
         this.stopTimes.add(stopTime);
     }
 
@@ -46,26 +38,12 @@ public class Stop extends Point {
         return name;
     }
 
-    public int getCode() {
-        return code;
-    }
 
     public String getTransportMean() {
         return transportMean;
     }
 
-    public ArrayList<String> getStopTimes() {
+    public ArrayList<Integer> getStopTimes() {
         return stopTimes;
     }
-
-    @Override
-    public String toString() {
-        return "Stops{" + System.lineSeparator() +
-                "\tstop_code='" + code + '\'' + System.lineSeparator() +
-                "\tstop_name='" + name + '\'' + System.lineSeparator() +
-                "\ttransport_type='" + transportMean + '\'' + System.lineSeparator() +
-                '}';
-
-    }
-
 }

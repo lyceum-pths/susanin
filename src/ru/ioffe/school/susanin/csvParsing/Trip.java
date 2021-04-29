@@ -22,13 +22,4 @@ public class Trip {
     public int getDirection() {
         return direction;
     }
-
-    @Override
-    public String toString() {
-        return "Trips{" + System.lineSeparator() +
-                "\troute_id=" + routeId + System.lineSeparator() +
-                "\ttrip_id='" + tripId + '\'' + System.lineSeparator() +
-                "\troute_id=" + direction + System.lineSeparator() +
-                '}';
-    }
 }

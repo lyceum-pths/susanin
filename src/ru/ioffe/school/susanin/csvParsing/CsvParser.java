@@ -30,13 +30,12 @@ public class CsvParser {
             reader.readNext();
             for (String[] data : reader) {
                 long id = Integer.parseInt(data[0]);
-                int code = Integer.parseInt(data[1]);
                 String name = data[2];
                 double lat = Double.parseDouble(data[3]);
                 double lon = Double.parseDouble(data[4]);
                 String type = data[7];
 
-                result.add(new Stop(id, code, name, lat, lon, type));
+                result.add(new Stop(id, name, lat, lon, type));
             }
             return result;
         }
@@ -48,8 +47,8 @@ public class CsvParser {
             reader.readNext();
             for (String[] data : reader) {
                 int routeId = Integer.parseInt(data[0]);
-                String routeName = data[1];
-                String routeType = data[4];
+                String routeName = data[2];
+                String routeType = data[5];
 
                 result.add(new Route(routeId, routeName, routeType));
             }
@@ -80,13 +79,13 @@ public class CsvParser {
             reader.readNext();
             for (String[] data : reader) {
                 int tripId = Integer.parseInt(data[0]);
-                String time = data[1];//should be int
+                String[] time = data[1].split(":");
+                int absTime = Integer.parseInt(time[0]) * 60 + Integer.parseInt(time[1]);
                 long stopId = Long.parseLong(data[3]);
-                int stopSequence = Integer.parseInt(data[4]);
 
-                stopsById.get(stopId).addStopTime(time);
+                stopsById.get(stopId).addStopTime(absTime);
                 if (!result.containsKey(tripId)) {
-                    result.put(tripId, new ArrayList<Long>(Arrays.asList(stopId)));
+                    result.put(tripId, new ArrayList<>(Arrays.asList(stopId)));
                 } else {
                     result.get(tripId).add(stopId);
                 }

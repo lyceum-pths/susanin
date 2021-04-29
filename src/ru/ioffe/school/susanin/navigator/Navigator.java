@@ -56,7 +56,7 @@ public class Navigator {
         return times[to.getId()];
     }
 
-    public LinkedHashMap<Edge, Double> navigate(Point start, Point end, int maxCost,
+    public LinkedHashMap<Edge, Double> navigate(Point start, Point end, double startTime, int maxCost,
                                                 HashMap<Vertex, ArrayList<Edge>> graph, ArrayList<Vertex> vertices) {
         final double INFINITY = 1000000.0;
         double[] times = new double[vertices.size()];
@@ -92,7 +92,7 @@ public class Navigator {
 
             for (Edge edge : graph.get(vertex)) {
                 Vertex to = edge.getTo();
-                double gap = edge.getTime(0.0);
+                double gap = edge.getTime(startTime + times[vertices.indexOf(vertex)]);
                 if (times[vertex.getId()] + gap < times[to.getId()]) {
                     to.setTime(times[vertex.getId()] + gap);
                     times[to.getId()] = to.getTime();
@@ -104,10 +104,9 @@ public class Navigator {
 
         Edge currentEdge = prev[destination.getId()];
         while (!currentEdge.getFrom().equals(origin)) {
-            route.put(currentEdge, times[currentEdge.getTo().getId()]);
+            route.put(currentEdge, times[currentEdge.getTo().getId()] - startTime);
             currentEdge = prev[currentEdge.getFrom().getId()];
         }
-
         return route;
     }
 }

@@ -1,13 +1,15 @@
 package ru.ioffe.school.susanin;
 
 import com.opencsv.exceptions.CsvValidationException;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import ru.ioffe.school.susanin.csvParsing.CsvMapper;
 import ru.ioffe.school.susanin.data.Point;
 import ru.ioffe.school.susanin.data.Road;
+import ru.ioffe.school.susanin.data.Route;
+import ru.ioffe.school.susanin.data.Stop;
 import ru.ioffe.school.susanin.debug.MapDrawer;
 import ru.ioffe.school.susanin.mapParsing.POIParser;
 import ru.ioffe.school.susanin.mapParsing.Parser;
+import ru.ioffe.school.susanin.utils.DataSaver;
 
 
 import java.io.FileInputStream;
@@ -33,54 +35,60 @@ public class Main {
      *
      * @param args command line arguments
      */
-    public static void main(String[] args) throws IOException, CsvValidationException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+
 
         Scanner in = new Scanner(System.in);
         System.out.println("Need to parse new file?\ntype \"y\" for yes\n" +
                 "!!! Spb is parsed. Don't parse again !!!");
         String choice = in.nextLine();
-        HashMap<Long, Point> points = new HashMap<>();
-        HashSet<Road> roads = new HashSet<>();
         if (choice.equals("y")) {
             try {
                 HashSet<String> POI = new HashSet<>();
+                HashMap<Long, Point> points = new HashMap<>();
+                HashSet<Road> roads = new HashSet<>();
+                HashMap<Long, Stop> stops = new HashMap<>();
+                ArrayList<Route> routes = new ArrayList<>();
 
-                Path pois = Paths.get(MAP_RESOURCES_DIR + "preparsefinal.xml");
+                Path POIs = Paths.get(MAP_RESOURCES_DIR + "preparse_final.xml");
                 POIParser poiParser = new POIParser();
-                poiParser.parse(pois);
+                poiParser.parse(POIs);
                 POI.addAll(poiParser.getPOI());
 
-                Path city = Paths.get(MAP_RESOURCES_DIR + "final.xml");
+                Path city = Paths.get(MAP_RESOURCES_DIR + "for_final.osm");
                 Parser cityParser = new Parser();
                 cityParser.parse(city, POI);
                 points.putAll(cityParser.getPointsCollection());
                 roads.addAll(cityParser.getRoadsCollection());
 
+                CsvMapper csvMapper = new CsvMapper();
+                csvMapper.createMapping();
+                stops.putAll(csvMapper.getStops());
+                routes.addAll(csvMapper.getRoutes());
+
                 Path data = Paths.get("data\\map.data");
-                Parser.saveData(points, roads, data);
+                DataSaver.saveData(points, roads, stops, routes, data);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        CsvMapper csvMapper = new CsvMapper();
-        CsvMapper.createMapping();
+        //drawMap();
+    }
 
+    private static void drawMap() throws IOException, ClassNotFoundException {
         MapDrawer fullMap = new MapDrawer(2048, 1536, 59.6254, 60.1613,
                 29.6068, 30.7343, false);
         MapDrawer center = new MapDrawer(4096, 3072, 59.9034, 59.9617,
                 30.2392, 30.4187, false);
-        try {
-            FileInputStream fis = new FileInputStream(Paths.get("data\\map.data").toFile());
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            points = (HashMap<Long, Point>) ois.readObject();
-            roads = (HashSet<Road>) ois.readObject();
-            fullMap.drawImage(points, roads);
-            fullMap.saveImage("spb_full");
-            center.drawImage(points, roads);
-            center.saveImage("spb_center");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        FileInputStream fis = new FileInputStream(Paths.get("data\\map.data").toFile());
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        HashMap<Long, Point> points = (HashMap<Long, Point>) ois.readObject();
+        HashSet<Road> roads = (HashSet<Road>) ois.readObject();
+        HashMap<Long, Stop> stops = (HashMap<Long, Stop>) ois.readObject();
+        fullMap.drawImage(points, roads, stops);
+        fullMap.saveImage("spb_full");
+        center.drawImage(points, roads, stops);
+        center.saveImage("spb_center");
     }
 }
